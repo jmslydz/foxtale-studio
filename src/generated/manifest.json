@@ -1,0 +1,802 @@
+{
+  "stickers": [
+    {
+      "id": "cat-sticker-0e9b9693de00c002ebda5f348491c377",
+      "label": "0e9b9693de00c002ebda5f348491c377",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/0e9b9693de00c002ebda5f348491c377.png"
+    },
+    {
+      "id": "cat-sticker-12a5bbc8dc82de08520dd196af2462a2",
+      "label": "12a5bbc8dc82de08520dd196af2462a2",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/12a5bbc8dc82de08520dd196af2462a2.png"
+    },
+    {
+      "id": "cat-sticker-1c73f114b2cbf6c4c16fa8ac9c128126",
+      "label": "1c73f114b2cbf6c4c16fa8ac9c128126",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/1c73f114b2cbf6c4c16fa8ac9c128126.png"
+    },
+    {
+      "id": "cat-sticker-5d473c15b13f518d6a2e41b0b8a013fe",
+      "label": "5d473c15b13f518d6a2e41b0b8a013fe",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/5d473c15b13f518d6a2e41b0b8a013fe.png"
+    },
+    {
+      "id": "cat-sticker-5f200af2cb1bb732f7cb28a98d3e51cf",
+      "label": "5f200af2cb1bb732f7cb28a98d3e51cf",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/5f200af2cb1bb732f7cb28a98d3e51cf.png"
+    },
+    {
+      "id": "cat-sticker-63f6f28fdf64a03111845e3530090833",
+      "label": "63f6f28fdf64a03111845e3530090833",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/63f6f28fdf64a03111845e3530090833.png"
+    },
+    {
+      "id": "cat-sticker-6ed7b01e273546c36e8da3c18ef9d3e5",
+      "label": "6ed7b01e273546c36e8da3c18ef9d3e5",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/6ed7b01e273546c36e8da3c18ef9d3e5.png"
+    },
+    {
+      "id": "cat-sticker-8b3b9db9b254e37a6bf889cbfddc86f7",
+      "label": "8b3b9db9b254e37a6bf889cbfddc86f7",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/8b3b9db9b254e37a6bf889cbfddc86f7.png"
+    },
+    {
+      "id": "cat-sticker-8da311d7081a7eeb2dc6a953ddc2958c",
+      "label": "8da311d7081a7eeb2dc6a953ddc2958c",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/8da311d7081a7eeb2dc6a953ddc2958c.png"
+    },
+    {
+      "id": "cat-sticker-915ee3086873a193730411866fc23400",
+      "label": "915ee3086873a193730411866fc23400",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/915ee3086873a193730411866fc23400.png"
+    },
+    {
+      "id": "cat-sticker-9236a927f8655cc6a18e615a85abc90d",
+      "label": "9236a927f8655cc6a18e615a85abc90d",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/9236a927f8655cc6a18e615a85abc90d.png"
+    },
+    {
+      "id": "cat-sticker-9b1d73f69d7668d19f4ad3d88e045b81",
+      "label": "9b1d73f69d7668d19f4ad3d88e045b81",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/9b1d73f69d7668d19f4ad3d88e045b81.png"
+    },
+    {
+      "id": "cat-sticker-a3ad87a38c6beed065f7a14f85f075e1",
+      "label": "A3ad87a38c6beed065f7a14f85f075e1",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/a3ad87a38c6beed065f7a14f85f075e1.png"
+    },
+    {
+      "id": "cat-sticker-a54492872cf29c1447195b4d6f1361d8",
+      "label": "A54492872cf29c1447195b4d6f1361d8",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/a54492872cf29c1447195b4d6f1361d8.png"
+    },
+    {
+      "id": "cat-sticker-bb9c8dc84c4cd9fe4c1366b4709cd639",
+      "label": "Bb9c8dc84c4cd9fe4c1366b4709cd639",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/bb9c8dc84c4cd9fe4c1366b4709cd639.png"
+    },
+    {
+      "id": "cat-sticker-bd2319e23a2ba7c33aeb367852ee74f3",
+      "label": "Bd2319e23a2ba7c33aeb367852ee74f3",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/bd2319e23a2ba7c33aeb367852ee74f3.png"
+    },
+    {
+      "id": "cat-sticker-c066be63d5441483c3b0a21b5951c9d8",
+      "label": "C066be63d5441483c3b0a21b5951c9d8",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/c066be63d5441483c3b0a21b5951c9d8.png"
+    },
+    {
+      "id": "cat-sticker-c66e25204ca9a88dd8388c545a1a3acb",
+      "label": "C66e25204ca9a88dd8388c545a1a3acb",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/c66e25204ca9a88dd8388c545a1a3acb.png"
+    },
+    {
+      "id": "cat-sticker-d3e5d8998337fbcf2e9419839e8227db",
+      "label": "D3e5d8998337fbcf2e9419839e8227db",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/d3e5d8998337fbcf2e9419839e8227db.png"
+    },
+    {
+      "id": "cat-sticker-f146aa527fc59038d7022d8c45c66d87",
+      "label": "F146aa527fc59038d7022d8c45c66d87",
+      "category": "Cat Sticker",
+      "src": "stickers/cat-sticker/f146aa527fc59038d7022d8c45c66d87.png"
+    },
+    {
+      "id": "icon-sticker-069fc2b7c1ee71bf8e860850375628b0",
+      "label": "069fc2b7c1ee71bf8e860850375628b0",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/069fc2b7c1ee71bf8e860850375628b0.png"
+    },
+    {
+      "id": "icon-sticker-07f33203d7379ebf6bfb81a87c96f3ac",
+      "label": "07f33203d7379ebf6bfb81a87c96f3ac",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/07f33203d7379ebf6bfb81a87c96f3ac.png"
+    },
+    {
+      "id": "icon-sticker-0d0a3a697cb166bd4b66f0ec1500a3cf",
+      "label": "0d0a3a697cb166bd4b66f0ec1500a3cf",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/0d0a3a697cb166bd4b66f0ec1500a3cf.png"
+    },
+    {
+      "id": "icon-sticker-150ddb66ed662e5f35000023b887e2cf",
+      "label": "150ddb66ed662e5f35000023b887e2cf",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/150ddb66ed662e5f35000023b887e2cf.png"
+    },
+    {
+      "id": "icon-sticker-1872775fd76e733e1ab2855f8ce4d61a",
+      "label": "1872775fd76e733e1ab2855f8ce4d61a",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/1872775fd76e733e1ab2855f8ce4d61a.png"
+    },
+    {
+      "id": "icon-sticker-246572aee1d76bc031b48787ed189a86",
+      "label": "246572aee1d76bc031b48787ed189a86",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/246572aee1d76bc031b48787ed189a86.png"
+    },
+    {
+      "id": "icon-sticker-2c5987a16a30c5a1355c2585858a6a1f",
+      "label": "2c5987a16a30c5a1355c2585858a6a1f",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/2c5987a16a30c5a1355c2585858a6a1f.png"
+    },
+    {
+      "id": "icon-sticker-4b14b77cfdfaffaff9482ff0958d6542",
+      "label": "4b14b77cfdfaffaff9482ff0958d6542",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/4b14b77cfdfaffaff9482ff0958d6542.png"
+    },
+    {
+      "id": "icon-sticker-5757abfeb97d0f44fad755e224e268d4",
+      "label": "5757abfeb97d0f44fad755e224e268d4",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/5757abfeb97d0f44fad755e224e268d4.png"
+    },
+    {
+      "id": "icon-sticker-7771d5c4130443f897d0e35a76030544",
+      "label": "7771d5c4130443f897d0e35a76030544",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/7771d5c4130443f897d0e35a76030544.png"
+    },
+    {
+      "id": "icon-sticker-7dcfd5635f2a2f6f6aa8c1f2bfe202fd",
+      "label": "7dcfd5635f2a2f6f6aa8c1f2bfe202fd",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/7dcfd5635f2a2f6f6aa8c1f2bfe202fd.png"
+    },
+    {
+      "id": "icon-sticker-8e45f2cac28b15d2a06bed95d15a947d",
+      "label": "8e45f2cac28b15d2a06bed95d15a947d",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/8e45f2cac28b15d2a06bed95d15a947d.png"
+    },
+    {
+      "id": "icon-sticker-a5dd4f4e13762453b939276e652ad409",
+      "label": "A5dd4f4e13762453b939276e652ad409",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/a5dd4f4e13762453b939276e652ad409.png"
+    },
+    {
+      "id": "icon-sticker-a96cdcecfa061c923a89baa7194fef76",
+      "label": "A96cdcecfa061c923a89baa7194fef76",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/a96cdcecfa061c923a89baa7194fef76.png"
+    },
+    {
+      "id": "icon-sticker-b37f0fc0fe37c92affe95bdd6ad2e211",
+      "label": "B37f0fc0fe37c92affe95bdd6ad2e211",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/b37f0fc0fe37c92affe95bdd6ad2e211.png"
+    },
+    {
+      "id": "icon-sticker-c23732c2c2a3e03aacb07fb7c92bada5",
+      "label": "C23732c2c2a3e03aacb07fb7c92bada5",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/c23732c2c2a3e03aacb07fb7c92bada5.png"
+    },
+    {
+      "id": "icon-sticker-c3c8bf83de3af2efcab9639bcb449b6d",
+      "label": "C3c8bf83de3af2efcab9639bcb449b6d",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/c3c8bf83de3af2efcab9639bcb449b6d.png"
+    },
+    {
+      "id": "icon-sticker-c479d68bd3d562f161d405d9d0e17221",
+      "label": "C479d68bd3d562f161d405d9d0e17221",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/c479d68bd3d562f161d405d9d0e17221.png"
+    },
+    {
+      "id": "icon-sticker-c9fac393237d3c6860fc0b34dccf2a2c",
+      "label": "C9fac393237d3c6860fc0b34dccf2a2c",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/c9fac393237d3c6860fc0b34dccf2a2c.png"
+    },
+    {
+      "id": "icon-sticker-ce993e13629b2cd8beb28955ef317f74",
+      "label": "Ce993e13629b2cd8beb28955ef317f74",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/ce993e13629b2cd8beb28955ef317f74.png"
+    },
+    {
+      "id": "icon-sticker-d84842435cdddb2879c967be0e800828",
+      "label": "D84842435cdddb2879c967be0e800828",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/d84842435cdddb2879c967be0e800828.png"
+    },
+    {
+      "id": "icon-sticker-d9750bec6e09bb89bfe8b5023a5f1890",
+      "label": "D9750bec6e09bb89bfe8b5023a5f1890",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/d9750bec6e09bb89bfe8b5023a5f1890.png"
+    },
+    {
+      "id": "icon-sticker-f839a6cbf33b145138fc9bd304077b3a",
+      "label": "F839a6cbf33b145138fc9bd304077b3a",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/f839a6cbf33b145138fc9bd304077b3a.png"
+    },
+    {
+      "id": "icon-sticker-ff430ac79846e2af2c9be525c8a1067b",
+      "label": "Ff430ac79846e2af2c9be525c8a1067b",
+      "category": "Icon Sticker",
+      "src": "stickers/icon-sticker/ff430ac79846e2af2c9be525c8a1067b.png"
+    },
+    {
+      "id": "korumi-sticker-0ee0d47715ad2f999b50c288ee2f2757",
+      "label": "0ee0d47715ad2f999b50c288ee2f2757",
+      "category": "Korumi Sticker",
+      "src": "stickers/korumi-sticker/0ee0d47715ad2f999b50c288ee2f2757.png"
+    },
+    {
+      "id": "korumi-sticker-44ad8844d076f0995b9cd3ed8e9b23a3",
+      "label": "44ad8844d076f0995b9cd3ed8e9b23a3",
+      "category": "Korumi Sticker",
+      "src": "stickers/korumi-sticker/44ad8844d076f0995b9cd3ed8e9b23a3.png"
+    },
+    {
+      "id": "korumi-sticker-64bc606bf93f325933d8b817ab17202a",
+      "label": "64bc606bf93f325933d8b817ab17202a",
+      "category": "Korumi Sticker",
+      "src": "stickers/korumi-sticker/64bc606bf93f325933d8b817ab17202a.png"
+    },
+    {
+      "id": "korumi-sticker-744ca78ec4c056679b13cfd27dc99028",
+      "label": "744ca78ec4c056679b13cfd27dc99028",
+      "category": "Korumi Sticker",
+      "src": "stickers/korumi-sticker/744ca78ec4c056679b13cfd27dc99028.png"
+    },
+    {
+      "id": "lily-sticker-0f5698ed0898a57f643d61c60d96443f",
+      "label": "0f5698ed0898a57f643d61c60d96443f",
+      "category": "Lily Sticker",
+      "src": "stickers/lily-sticker/0f5698ed0898a57f643d61c60d96443f.png"
+    },
+    {
+      "id": "lily-sticker-1cd1ca21c9e7b236bed7dcfd3f918f33",
+      "label": "1cd1ca21c9e7b236bed7dcfd3f918f33",
+      "category": "Lily Sticker",
+      "src": "stickers/lily-sticker/1cd1ca21c9e7b236bed7dcfd3f918f33.png"
+    },
+    {
+      "id": "lily-sticker-2056a96df32d7b26b31cfdf47087f3d2",
+      "label": "2056a96df32d7b26b31cfdf47087f3d2",
+      "category": "Lily Sticker",
+      "src": "stickers/lily-sticker/2056a96df32d7b26b31cfdf47087f3d2.png"
+    },
+    {
+      "id": "lily-sticker-4c3cddd170adb9713bc8ada2ca3a3cb8",
+      "label": "4c3cddd170adb9713bc8ada2ca3a3cb8",
+      "category": "Lily Sticker",
+      "src": "stickers/lily-sticker/4c3cddd170adb9713bc8ada2ca3a3cb8.png"
+    },
+    {
+      "id": "lily-sticker-4e647861c502d6c8010fd4b236581f82",
+      "label": "4e647861c502d6c8010fd4b236581f82",
+      "category": "Lily Sticker",
+      "src": "stickers/lily-sticker/4e647861c502d6c8010fd4b236581f82.png"
+    },
+    {
+      "id": "lily-sticker-74587cf89bf48db8b47fa40f42db3aab",
+      "label": "74587cf89bf48db8b47fa40f42db3aab",
+      "category": "Lily Sticker",
+      "src": "stickers/lily-sticker/74587cf89bf48db8b47fa40f42db3aab.png"
+    },
+    {
+      "id": "lily-sticker-79d7ff7758f05a7d0de671a18421a89a",
+      "label": "79d7ff7758f05a7d0de671a18421a89a",
+      "category": "Lily Sticker",
+      "src": "stickers/lily-sticker/79d7ff7758f05a7d0de671a18421a89a.png"
+    },
+    {
+      "id": "lily-sticker-7df3cffc7e36a51d138660af2aa11ffc",
+      "label": "7df3cffc7e36a51d138660af2aa11ffc",
+      "category": "Lily Sticker",
+      "src": "stickers/lily-sticker/7df3cffc7e36a51d138660af2aa11ffc.png"
+    },
+    {
+      "id": "lily-sticker-8e424bdf3fa19538bc285d1130dc57ea",
+      "label": "8e424bdf3fa19538bc285d1130dc57ea",
+      "category": "Lily Sticker",
+      "src": "stickers/lily-sticker/8e424bdf3fa19538bc285d1130dc57ea.png"
+    },
+    {
+      "id": "lily-sticker-8f79eb14620beaebe87f8f77f225c7a4",
+      "label": "8f79eb14620beaebe87f8f77f225c7a4",
+      "category": "Lily Sticker",
+      "src": "stickers/lily-sticker/8f79eb14620beaebe87f8f77f225c7a4.png"
+    },
+    {
+      "id": "lily-sticker-bc9065715d78e59f8e58dc2fefccca3e",
+      "label": "Bc9065715d78e59f8e58dc2fefccca3e",
+      "category": "Lily Sticker",
+      "src": "stickers/lily-sticker/bc9065715d78e59f8e58dc2fefccca3e.png"
+    },
+    {
+      "id": "little-prince-sticker-237af5618141ec13d8ddae39a7c1a76b",
+      "label": "237af5618141ec13d8ddae39a7c1a76b",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/237af5618141ec13d8ddae39a7c1a76b.png"
+    },
+    {
+      "id": "little-prince-sticker-2f273bda844a965fbc09b4231f9460bd",
+      "label": "2f273bda844a965fbc09b4231f9460bd",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/2f273bda844a965fbc09b4231f9460bd.png"
+    },
+    {
+      "id": "little-prince-sticker-3923bbbe6622280d625c313f5cf82b8a",
+      "label": "3923bbbe6622280d625c313f5cf82b8a",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/3923bbbe6622280d625c313f5cf82b8a.png"
+    },
+    {
+      "id": "little-prince-sticker-40db19cf3875ed06a15996c601e56068",
+      "label": "40db19cf3875ed06a15996c601e56068",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/40db19cf3875ed06a15996c601e56068.png"
+    },
+    {
+      "id": "little-prince-sticker-433f70117bb6dff30b2f4726679f343d",
+      "label": "433f70117bb6dff30b2f4726679f343d",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/433f70117bb6dff30b2f4726679f343d.png"
+    },
+    {
+      "id": "little-prince-sticker-459f993e8a0a369a7f0c2b17c858098a",
+      "label": "459f993e8a0a369a7f0c2b17c858098a",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/459f993e8a0a369a7f0c2b17c858098a.png"
+    },
+    {
+      "id": "little-prince-sticker-53c09416d5502558e240eabe9a839fb9",
+      "label": "53c09416d5502558e240eabe9a839fb9",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/53c09416d5502558e240eabe9a839fb9.png"
+    },
+    {
+      "id": "little-prince-sticker-54efcab5c6e30f49c1dccb2924c0462a",
+      "label": "54efcab5c6e30f49c1dccb2924c0462a",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/54efcab5c6e30f49c1dccb2924c0462a.png"
+    },
+    {
+      "id": "little-prince-sticker-5b8b1d4f34b01333dbaa8e86578d2cc1",
+      "label": "5b8b1d4f34b01333dbaa8e86578d2cc1",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/5b8b1d4f34b01333dbaa8e86578d2cc1.png"
+    },
+    {
+      "id": "little-prince-sticker-6dbd4158be68fec50933856bb43409b7",
+      "label": "6dbd4158be68fec50933856bb43409b7",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/6dbd4158be68fec50933856bb43409b7.png"
+    },
+    {
+      "id": "little-prince-sticker-7327260461b57c3094e587081261036f",
+      "label": "7327260461b57c3094e587081261036f",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/7327260461b57c3094e587081261036f.png"
+    },
+    {
+      "id": "little-prince-sticker-8b6e0e7fd8c8328ebe5b4c8bd605ed12",
+      "label": "8b6e0e7fd8c8328ebe5b4c8bd605ed12",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/8b6e0e7fd8c8328ebe5b4c8bd605ed12.png"
+    },
+    {
+      "id": "little-prince-sticker-913fcf5b5e27228bae85427882fea9bb",
+      "label": "913fcf5b5e27228bae85427882fea9bb",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/913fcf5b5e27228bae85427882fea9bb.png"
+    },
+    {
+      "id": "little-prince-sticker-9c521f03c6fa69dabcff4eae32cffde4",
+      "label": "9c521f03c6fa69dabcff4eae32cffde4",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/9c521f03c6fa69dabcff4eae32cffde4.png"
+    },
+    {
+      "id": "little-prince-sticker-aa78a1ed4d87acd10d1263fcd61fe771",
+      "label": "Aa78a1ed4d87acd10d1263fcd61fe771",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/aa78a1ed4d87acd10d1263fcd61fe771.png"
+    },
+    {
+      "id": "little-prince-sticker-bceee329cbe9e8520a3bd62b49911bd5",
+      "label": "Bceee329cbe9e8520a3bd62b49911bd5",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/bceee329cbe9e8520a3bd62b49911bd5.png"
+    },
+    {
+      "id": "little-prince-sticker-ca4979a185122a628db1c2e0e0c6f3b4",
+      "label": "Ca4979a185122a628db1c2e0e0c6f3b4",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/ca4979a185122a628db1c2e0e0c6f3b4.png"
+    },
+    {
+      "id": "little-prince-sticker-d368690bb5d1fcd69ef3973982b1e703",
+      "label": "D368690bb5d1fcd69ef3973982b1e703",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/d368690bb5d1fcd69ef3973982b1e703.png"
+    },
+    {
+      "id": "little-prince-sticker-dea4a8ec31da9a40bb2d5a9623be0301",
+      "label": "Dea4a8ec31da9a40bb2d5a9623be0301",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/dea4a8ec31da9a40bb2d5a9623be0301.png"
+    },
+    {
+      "id": "little-prince-sticker-defc1fb7f5f409124db9a4c509807a66",
+      "label": "Defc1fb7f5f409124db9a4c509807a66",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/defc1fb7f5f409124db9a4c509807a66.png"
+    },
+    {
+      "id": "little-prince-sticker-f5ae8409e4a83a0c212348be55e0cc91",
+      "label": "F5ae8409e4a83a0c212348be55e0cc91",
+      "category": "Little Prince Sticker",
+      "src": "stickers/little-prince-sticker/f5ae8409e4a83a0c212348be55e0cc91.png"
+    },
+    {
+      "id": "snoopy-sticker-375156c5b9013faa770641d58f1d32e0",
+      "label": "375156c5b9013faa770641d58f1d32e0",
+      "category": "Snoopy Sticker",
+      "src": "stickers/snoopy-sticker/375156c5b9013faa770641d58f1d32e0.png"
+    },
+    {
+      "id": "snoopy-sticker-6551d74bd3fdbb2d1d1428398c9ca3a9",
+      "label": "6551d74bd3fdbb2d1d1428398c9ca3a9",
+      "category": "Snoopy Sticker",
+      "src": "stickers/snoopy-sticker/6551d74bd3fdbb2d1d1428398c9ca3a9.png"
+    },
+    {
+      "id": "snoopy-sticker-6f27bb0ff9343b4ac76ffbae48930164",
+      "label": "6f27bb0ff9343b4ac76ffbae48930164",
+      "category": "Snoopy Sticker",
+      "src": "stickers/snoopy-sticker/6f27bb0ff9343b4ac76ffbae48930164.png"
+    },
+    {
+      "id": "snoopy-sticker-7b65bb3badab6a8875e435b96c6c65df",
+      "label": "7b65bb3badab6a8875e435b96c6c65df",
+      "category": "Snoopy Sticker",
+      "src": "stickers/snoopy-sticker/7b65bb3badab6a8875e435b96c6c65df.png"
+    },
+    {
+      "id": "snoopy-sticker-804e0627e05cd39bb28fcdda7f03828a",
+      "label": "804e0627e05cd39bb28fcdda7f03828a",
+      "category": "Snoopy Sticker",
+      "src": "stickers/snoopy-sticker/804e0627e05cd39bb28fcdda7f03828a.png"
+    },
+    {
+      "id": "snoopy-sticker-9af3ce6180d5603d1e1c907093107d77",
+      "label": "9af3ce6180d5603d1e1c907093107d77",
+      "category": "Snoopy Sticker",
+      "src": "stickers/snoopy-sticker/9af3ce6180d5603d1e1c907093107d77.png"
+    },
+    {
+      "id": "snoopy-sticker-aa7bbe3cda98733a53bc18eb48523ed3",
+      "label": "Aa7bbe3cda98733a53bc18eb48523ed3",
+      "category": "Snoopy Sticker",
+      "src": "stickers/snoopy-sticker/aa7bbe3cda98733a53bc18eb48523ed3.png"
+    },
+    {
+      "id": "snoopy-sticker-ab6a3b05dd1a4367ec4600c0a79a0ec0",
+      "label": "Ab6a3b05dd1a4367ec4600c0a79a0ec0",
+      "category": "Snoopy Sticker",
+      "src": "stickers/snoopy-sticker/ab6a3b05dd1a4367ec4600c0a79a0ec0.png"
+    },
+    {
+      "id": "snoopy-sticker-c49df3ef7e73a4e38e125e0e5b199285",
+      "label": "C49df3ef7e73a4e38e125e0e5b199285",
+      "category": "Snoopy Sticker",
+      "src": "stickers/snoopy-sticker/c49df3ef7e73a4e38e125e0e5b199285.png"
+    },
+    {
+      "id": "snoopy-sticker-eb1bc7ffe7fcf7fe0befc2a12e061665",
+      "label": "Eb1bc7ffe7fcf7fe0befc2a12e061665",
+      "category": "Snoopy Sticker",
+      "src": "stickers/snoopy-sticker/eb1bc7ffe7fcf7fe0befc2a12e061665.png"
+    },
+    {
+      "id": "snoopy-sticker-f131295f86c54ab3034b00eb81ccba1f",
+      "label": "F131295f86c54ab3034b00eb81ccba1f",
+      "category": "Snoopy Sticker",
+      "src": "stickers/snoopy-sticker/f131295f86c54ab3034b00eb81ccba1f.png"
+    },
+    {
+      "id": "snoopy-sticker-f4528fa85bc31863213f81820fc83311",
+      "label": "F4528fa85bc31863213f81820fc83311",
+      "category": "Snoopy Sticker",
+      "src": "stickers/snoopy-sticker/f4528fa85bc31863213f81820fc83311.png"
+    },
+    {
+      "id": "snoopy-sticker-fe9ffcd83ca844e3232d4ba74c9a0101",
+      "label": "Fe9ffcd83ca844e3232d4ba74c9a0101",
+      "category": "Snoopy Sticker",
+      "src": "stickers/snoopy-sticker/fe9ffcd83ca844e3232d4ba74c9a0101.png"
+    },
+    {
+      "id": "text-sticker-90032c5fb03d886d0f9ecbabbb701008",
+      "label": "90032c5fb03d886d0f9ecbabbb701008",
+      "category": "Text Sticker",
+      "src": "stickers/text-sticker/90032c5fb03d886d0f9ecbabbb701008.png"
+    },
+    {
+      "id": "text-sticker-9ceab36605ff5dba440e19a1b457897c",
+      "label": "9ceab36605ff5dba440e19a1b457897c",
+      "category": "Text Sticker",
+      "src": "stickers/text-sticker/9ceab36605ff5dba440e19a1b457897c.png"
+    },
+    {
+      "id": "zootopia-sticker-03db6b4bec68c0c6b104a5f074d0cda3",
+      "label": "03db6b4bec68c0c6b104a5f074d0cda3",
+      "category": "Zootopia Sticker",
+      "src": "stickers/zootopia-sticker/03db6b4bec68c0c6b104a5f074d0cda3.png"
+    },
+    {
+      "id": "zootopia-sticker-414d706980100dcc32179723694c1bb0",
+      "label": "414d706980100dcc32179723694c1bb0",
+      "category": "Zootopia Sticker",
+      "src": "stickers/zootopia-sticker/414d706980100dcc32179723694c1bb0.png"
+    },
+    {
+      "id": "zootopia-sticker-f8640a1078d7d8152035ea5c711e7720",
+      "label": "F8640a1078d7d8152035ea5c711e7720",
+      "category": "Zootopia Sticker",
+      "src": "stickers/zootopia-sticker/f8640a1078d7d8152035ea5c711e7720.png"
+    }
+  ],
+  "backgrounds": [
+    {
+      "id": "1f716720ccb10a1cb6e5ea766fa31445",
+      "label": "1f716720ccb10a1cb6e5ea766fa31445",
+      "src": "backgrounds/1f716720ccb10a1cb6e5ea766fa31445.png"
+    },
+    {
+      "id": "25ab4b847a4eb6c4be9e926e8e942e06",
+      "label": "25ab4b847a4eb6c4be9e926e8e942e06",
+      "src": "backgrounds/25ab4b847a4eb6c4be9e926e8e942e06.png"
+    },
+    {
+      "id": "2c41b0c6176efe434600cd1a12986375",
+      "label": "2c41b0c6176efe434600cd1a12986375",
+      "src": "backgrounds/2c41b0c6176efe434600cd1a12986375.png"
+    },
+    {
+      "id": "3d0b20b69df07dc1718d88edd14a4523",
+      "label": "3d0b20b69df07dc1718d88edd14a4523",
+      "src": "backgrounds/3d0b20b69df07dc1718d88edd14a4523.png"
+    },
+    {
+      "id": "500d4f45d803baa9735e44c666ba394c",
+      "label": "500d4f45d803baa9735e44c666ba394c",
+      "src": "backgrounds/500d4f45d803baa9735e44c666ba394c.jpg"
+    },
+    {
+      "id": "775e447b21df6afb569ff5f06e824c8b",
+      "label": "775e447b21df6afb569ff5f06e824c8b",
+      "src": "backgrounds/775e447b21df6afb569ff5f06e824c8b.jpg"
+    },
+    {
+      "id": "9a7aeee4b46003a88c2931391de154aa",
+      "label": "9a7aeee4b46003a88c2931391de154aa",
+      "src": "backgrounds/9a7aeee4b46003a88c2931391de154aa.png"
+    },
+    {
+      "id": "bc2ce1ec3a15ba99a4d06cf57241ad32",
+      "label": "Bc2ce1ec3a15ba99a4d06cf57241ad32",
+      "src": "backgrounds/bc2ce1ec3a15ba99a4d06cf57241ad32.png"
+    },
+    {
+      "id": "download",
+      "label": "Download",
+      "src": "backgrounds/download.png"
+    },
+    {
+      "id": "f7b07485b3fba8233ac38bf2d28da7ff",
+      "label": "F7b07485b3fba8233ac38bf2d28da7ff",
+      "src": "backgrounds/f7b07485b3fba8233ac38bf2d28da7ff.jpg"
+    }
+  ],
+  "poses": [
+    {
+      "id": "duo-pic-pose-idea-069445b98813bbbce4706ad8b7059dd5",
+      "label": "069445b98813bbbce4706ad8b7059dd5",
+      "category": "Duo Pic Pose Idea",
+      "src": "poses/duo-pic-pose-idea/069445b98813bbbce4706ad8b7059dd5.jpg"
+    },
+    {
+      "id": "duo-pic-pose-idea-1efd7ab19f9860820d99613c3c2d7866",
+      "label": "1efd7ab19f9860820d99613c3c2d7866",
+      "category": "Duo Pic Pose Idea",
+      "src": "poses/duo-pic-pose-idea/1efd7ab19f9860820d99613c3c2d7866.jpg"
+    },
+    {
+      "id": "duo-pic-pose-idea-1efffd1591b6bf207a42a1e3adb794d1",
+      "label": "1efffd1591b6bf207a42a1e3adb794d1",
+      "category": "Duo Pic Pose Idea",
+      "src": "poses/duo-pic-pose-idea/1efffd1591b6bf207a42a1e3adb794d1.jpg"
+    },
+    {
+      "id": "duo-pic-pose-idea-258e1f281136b01fae3dd87273937f6f",
+      "label": "258e1f281136b01fae3dd87273937f6f",
+      "category": "Duo Pic Pose Idea",
+      "src": "poses/duo-pic-pose-idea/258e1f281136b01fae3dd87273937f6f.jpg"
+    },
+    {
+      "id": "duo-pic-pose-idea-2fbe40f85564175f0209649528959cd0",
+      "label": "2fbe40f85564175f0209649528959cd0",
+      "category": "Duo Pic Pose Idea",
+      "src": "poses/duo-pic-pose-idea/2fbe40f85564175f0209649528959cd0.jpg"
+    },
+    {
+      "id": "duo-pic-pose-idea-452095942dfd41cd0fcfc78747f0cc4d",
+      "label": "452095942dfd41cd0fcfc78747f0cc4d",
+      "category": "Duo Pic Pose Idea",
+      "src": "poses/duo-pic-pose-idea/452095942dfd41cd0fcfc78747f0cc4d.jpg"
+    },
+    {
+      "id": "duo-pic-pose-idea-56e77c905241bcab1eb30b7292fafc27",
+      "label": "56e77c905241bcab1eb30b7292fafc27",
+      "category": "Duo Pic Pose Idea",
+      "src": "poses/duo-pic-pose-idea/56e77c905241bcab1eb30b7292fafc27.jpg"
+    },
+    {
+      "id": "duo-pic-pose-idea-62a7a12235e959706eac6eb889f5f013",
+      "label": "62a7a12235e959706eac6eb889f5f013",
+      "category": "Duo Pic Pose Idea",
+      "src": "poses/duo-pic-pose-idea/62a7a12235e959706eac6eb889f5f013.jpg"
+    },
+    {
+      "id": "duo-pic-pose-idea-715420a0640f211f1a16016931aa11bf",
+      "label": "715420a0640f211f1a16016931aa11bf",
+      "category": "Duo Pic Pose Idea",
+      "src": "poses/duo-pic-pose-idea/715420a0640f211f1a16016931aa11bf.jpg"
+    },
+    {
+      "id": "duo-pic-pose-idea-b7af921d3cc37bb674d458d85eb4c3e5",
+      "label": "B7af921d3cc37bb674d458d85eb4c3e5",
+      "category": "Duo Pic Pose Idea",
+      "src": "poses/duo-pic-pose-idea/b7af921d3cc37bb674d458d85eb4c3e5.jpg"
+    },
+    {
+      "id": "duo-pic-pose-idea-cbced4fcdd79857fc581631782674b43",
+      "label": "Cbced4fcdd79857fc581631782674b43",
+      "category": "Duo Pic Pose Idea",
+      "src": "poses/duo-pic-pose-idea/cbced4fcdd79857fc581631782674b43.jpg"
+    },
+    {
+      "id": "duo-pic-pose-idea-ce6488f68c665501171396d8c160f696",
+      "label": "Ce6488f68c665501171396d8c160f696",
+      "category": "Duo Pic Pose Idea",
+      "src": "poses/duo-pic-pose-idea/ce6488f68c665501171396d8c160f696.jpg"
+    },
+    {
+      "id": "duo-pic-pose-idea-e730c2f5786ef967b6211e7a89c26ff0",
+      "label": "E730c2f5786ef967b6211e7a89c26ff0",
+      "category": "Duo Pic Pose Idea",
+      "src": "poses/duo-pic-pose-idea/e730c2f5786ef967b6211e7a89c26ff0.jpg"
+    },
+    {
+      "id": "duo-pic-pose-idea-ed91cf1df20a0beb635e3fa7afb0510f",
+      "label": "Ed91cf1df20a0beb635e3fa7afb0510f",
+      "category": "Duo Pic Pose Idea",
+      "src": "poses/duo-pic-pose-idea/ed91cf1df20a0beb635e3fa7afb0510f.jpg"
+    },
+    {
+      "id": "duo-pic-pose-idea-ef29c8a890c6db00cd24c6f818827737",
+      "label": "Ef29c8a890c6db00cd24c6f818827737",
+      "category": "Duo Pic Pose Idea",
+      "src": "poses/duo-pic-pose-idea/ef29c8a890c6db00cd24c6f818827737.jpg"
+    },
+    {
+      "id": "solo-pic-pose-idea-16a0c0b05cf9d70b6b736f7b7ef1ce60",
+      "label": "16a0c0b05cf9d70b6b736f7b7ef1ce60",
+      "category": "Solo Pic Pose Idea",
+      "src": "poses/solo-pic-pose-idea/16a0c0b05cf9d70b6b736f7b7ef1ce60.jpg"
+    },
+    {
+      "id": "solo-pic-pose-idea-35315aefe1b9199e3677af651afa34df",
+      "label": "35315aefe1b9199e3677af651afa34df",
+      "category": "Solo Pic Pose Idea",
+      "src": "poses/solo-pic-pose-idea/35315aefe1b9199e3677af651afa34df.jpg"
+    },
+    {
+      "id": "solo-pic-pose-idea-38201f7d236c342f3f7587facce11538",
+      "label": "38201f7d236c342f3f7587facce11538",
+      "category": "Solo Pic Pose Idea",
+      "src": "poses/solo-pic-pose-idea/38201f7d236c342f3f7587facce11538.jpg"
+    },
+    {
+      "id": "solo-pic-pose-idea-54d76c0cfb5bdf0d32f073447d9b0b14",
+      "label": "54d76c0cfb5bdf0d32f073447d9b0b14",
+      "category": "Solo Pic Pose Idea",
+      "src": "poses/solo-pic-pose-idea/54d76c0cfb5bdf0d32f073447d9b0b14.jpg"
+    },
+    {
+      "id": "solo-pic-pose-idea-744674478a71bf325af77e218811ff59",
+      "label": "744674478a71bf325af77e218811ff59",
+      "category": "Solo Pic Pose Idea",
+      "src": "poses/solo-pic-pose-idea/744674478a71bf325af77e218811ff59.jpg"
+    },
+    {
+      "id": "solo-pic-pose-idea-8c13bfa0a208864880b1fc82f8aed4ca",
+      "label": "8c13bfa0a208864880b1fc82f8aed4ca",
+      "category": "Solo Pic Pose Idea",
+      "src": "poses/solo-pic-pose-idea/8c13bfa0a208864880b1fc82f8aed4ca.jpg"
+    },
+    {
+      "id": "solo-pic-pose-idea-a04eb1ba9d6926b30c491442b6eb6937",
+      "label": "A04eb1ba9d6926b30c491442b6eb6937",
+      "category": "Solo Pic Pose Idea",
+      "src": "poses/solo-pic-pose-idea/a04eb1ba9d6926b30c491442b6eb6937.jpg"
+    },
+    {
+      "id": "solo-pic-pose-idea-a555b24effed01b2efcfbf8439666507",
+      "label": "A555b24effed01b2efcfbf8439666507",
+      "category": "Solo Pic Pose Idea",
+      "src": "poses/solo-pic-pose-idea/a555b24effed01b2efcfbf8439666507.jpg"
+    },
+    {
+      "id": "solo-pic-pose-idea-acbdf5804e08ee231ce7ba42bc396c10",
+      "label": "Acbdf5804e08ee231ce7ba42bc396c10",
+      "category": "Solo Pic Pose Idea",
+      "src": "poses/solo-pic-pose-idea/acbdf5804e08ee231ce7ba42bc396c10.jpg"
+    },
+    {
+      "id": "solo-pic-pose-idea-c27b4f13863ad96ab070a0432d52403c",
+      "label": "C27b4f13863ad96ab070a0432d52403c",
+      "category": "Solo Pic Pose Idea",
+      "src": "poses/solo-pic-pose-idea/c27b4f13863ad96ab070a0432d52403c.jpg"
+    },
+    {
+      "id": "solo-pic-pose-idea-dbda823e9cb592516ab788fabf32204f",
+      "label": "Dbda823e9cb592516ab788fabf32204f",
+      "category": "Solo Pic Pose Idea",
+      "src": "poses/solo-pic-pose-idea/dbda823e9cb592516ab788fabf32204f.jpg"
+    }
+  ]
+}

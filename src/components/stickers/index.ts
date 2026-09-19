@@ -1,0 +1,15 @@
+export { default as Sparkle4 } from './Sparkle4';
+export { default as Star5 } from './Star5';
+export { default as SparkleCluster } from './SparkleCluster';
+export { default as Moon } from './Moon';
+export { default as Sun } from './Sun';
+export { default as Cloud } from './Cloud';
+export { default as Rainbow } from './Rainbow';
+export { default as MoonAndStars } from './MoonAndStars';
+export { default as SparkleBurst } from './SparkleBurst';
+export { default as WashiTape } from './WashiTape';
+export { default as Squiggle } from './Squiggle';
+export { default as DottedArrow } from './DottedArrow';
+export { default as SpeechBubble } from './SpeechBubble';
+export { default as Crown } from './Crown';
+export { default as SmallCamera } from './SmallCamera';

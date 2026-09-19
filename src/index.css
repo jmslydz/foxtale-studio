@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --color-booth-bg: #FFF9F5;
+  --color-booth-pink: #FFD6E8;
+  --color-booth-lavender: #FFE4CF;
+  --color-booth-mint: #C8F5E3;
+  --color-booth-yellow: #FFF3C4;
+  --color-booth-sky: #C8E8FF;
+  --color-booth-rose: #FFB3C8;
+  --color-booth-violet: #FF8A3D;
+  --color-booth-sage: #9EDFC4;
+  --color-booth-butter: #FFE87A;
+  --color-booth-azure: #93CCFF;
+  --color-booth-peach: #FFE5D0;
+  --color-booth-text: #3A2A3A;
+  --color-booth-muted: #9A8A9A;
+  --color-booth-border: #EDE0ED;
+  --color-booth-card: #FFFFFF;
+  --font-sans: 'Nunito', system-ui, sans-serif;
+}
+
+*, *::before, *::after {
+  font-family: 'Nunito', system-ui, sans-serif;
+}
+
+body {
+  background-color: #FFF9F5;
+  color: #3A2A3A;
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #EDE0ED; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #FF8A3D; }
+
+/* Utility: hide the scrollbar while keeping the content scrollable. */
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}

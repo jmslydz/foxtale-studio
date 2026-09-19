@@ -1,0 +1,3 @@
+# Images are stored as regular git blobs (LFS caused pointer-file deployments,
+# breaking all png/jpg assets on Vercel). Normalize text files to LF.
+* text=auto eol=lf
