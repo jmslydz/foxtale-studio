@@ -10,17 +10,6 @@ const MISS_MESSAGES = [
   'Wrong one! Kelan is watching 👀',
 ];
 
-const FLOATERS = [
-  { ch: '💖', left: '8%', top: '12%', size: 28, delay: '0s' },
-  { ch: '💕', left: '86%', top: '18%', size: 24, delay: '0.8s' },
-  { ch: '✨', left: '14%', top: '68%', size: 22, delay: '1.6s' },
-  { ch: '💗', left: '88%', top: '62%', size: 26, delay: '2.2s' },
-  { ch: '🌸', left: '78%', top: '84%', size: 24, delay: '1.1s' },
-  { ch: '💝', left: '6%', top: '42%', size: 22, delay: '2.8s' },
-  { ch: '✨', left: '90%', top: '40%', size: 20, delay: '0.4s' },
-  { ch: '💖', left: '20%', top: '88%', size: 20, delay: '3.1s' },
-];
-
 /** Love-gate: birthday password with typing animation, wiggling fox and shake-on-miss. */
 export default function LockScreen({ onUnlock }: { onUnlock: () => void }) {
   const [typed, setTyped] = useState('');
@@ -61,18 +50,6 @@ export default function LockScreen({ onUnlock }: { onUnlock: () => void }) {
 
   return (
     <div className="min-h-dvh flex flex-col items-center justify-center relative overflow-hidden px-6 py-10" style={{ background: '#FFF9F5' }}>
-      {/* Floating cuties */}
-      {FLOATERS.map((f, i) => (
-        <span
-          key={i}
-          aria-hidden
-          className="absolute select-none pointer-events-none animate-drift"
-          style={{ left: f.left, top: f.top, fontSize: f.size, animationDelay: f.delay }}
-        >
-          {f.ch}
-        </span>
-      ))}
-
       <div className="relative z-10 w-full max-w-sm flex flex-col items-center gap-5 animate-pop">
         {/* Wiggling fox */}
         <div className="relative">
@@ -96,7 +73,7 @@ export default function LockScreen({ onUnlock }: { onUnlock: () => void }) {
           {typed}
           <span className="inline-block w-2 animate-pulse text-booth-violet">|</span>
         </p>
-        <p className="text-xs font-bold text-booth-muted tracking-widest -mt-3">KELANN BIRTHDAYYY (DD/MM/YY) MOOO</p>
+        <p className="text-xs font-bold text-booth-muted tracking-widest -mt-3">PIN IS (DD/MM/YY)</p>
 
         {/* Password box (shakes on miss) */}
         <div key={misses} className={misses > 0 ? 'animate-shake' : undefined}>

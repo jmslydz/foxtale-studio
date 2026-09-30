@@ -259,3 +259,7 @@ Checked all 62 files in `src/`: `tsc` clean, `vite build` clean. Found 8 things 
 
 - New src/screens/LockScreen.tsx, wired in App.tsx: every fresh load asks ARE U MYY BABBYYY with typewriter text, wiggling fox, floating hearts, masked DD/MM/YY input (accepts 100606, slashes optional), shake + rotating miss messages, hearts-burst success then unlock.
 - New drift/wiggle/shake keyframes in index.css (reduced-motion safe). Verified: lock, miss, open, unlock.
+
+## 2026-09-30 - Lock screen text trimmed (your call, UNCOMMITTED)
+
+- Removed floating emojis; hint line now PIN IS (DD/MM/YY). Fox, typing, shake, masked input stay. Verified. (Note: the earlier lock commit had already pushed before you said hold - this trim is local-only.)
