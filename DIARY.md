@@ -233,7 +233,6 @@ Checked all 62 files in `src/`: `tsc` clean, `vite build` clean. Found 8 things 
 - Verified with screenshots: polaroid setup is How-many-only; custom sticker placed with handles; custom bg tile present.
 
 ## 2026-09-30 — Confirmation popup bulletproofing (her report: popup missing)
-
 - Could not reproduce on current code (auto-popup fires on fill-up), but fixed two real gaps: lowering the count to match existing picks never opened it (now does), and there was no way to summon it manually.
 - `SetupScreen.tsx`: new **Preview my strip** button appears under the hint whenever picks are complete and the popup is closed.
 - Verified: lower-to-match opens it, manual button opens it. If she still doesn't see it, prime suspect is her phone showing cached JS — hard-refresh first.
@@ -249,3 +248,9 @@ Checked all 62 files in `src/`: `tsc` clean, `vite build` clean. Found 8 things 
 - Symptom: countdown finishes, no photo, no message. The snap failure was swallowed silently.
 - `CaptureScreen.tsx`: failures now show the reason on screen ("Shot failed (…). Tap Start to retry") so a screenshot tells us the exact step.
 - `captureFrame.ts`: dimension guards, drawImage failure detail, and encode fallbacks (JPEG → PNG → data URL) for phone browsers whose JPEG encoder returns nothing.
+
+## 2026-09-30 — GitHub updated + live link (your ask)
+
+- Pushed everything to `jmslydz/foxtale-studio` on main.
+- Live site via GitHub Pages + Actions (`.github/workflows/deploy-pages.yml`, base `/foxtale-studio/`): https://jmslydz.github.io/foxtale-studio/
+- Bonus: the live link is HTTPS, so her phone camera works there (the LAN http:// link is insecure, which blocks cameras).
