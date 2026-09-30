@@ -1,17 +1,16 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Camera, CircleCheck, Ban, CameraOff } from 'lucide-react';
+import { Camera, CircleCheck, Ban, CameraOff, Upload, SwitchCamera, ZoomIn, ZoomOut } from 'lucide-react';
 import { type Mode, type Layout, type Shot, SHOT_COUNTS, PASTEL_PHOTO_COLORS } from '../types';
-import { POSES } from '../stickerCatalog';
+import { POSES, findPose, getCustomPoses, resolvePublicSrc } from '../stickerCatalog';
 import { COUNTDOWN_SECONDS } from '../config';
 import { getShotAspect } from '../lib/shotAspect';
-import { getFilterCss } from '../lib/filters';
 import { fitBox } from '../lib/fitLayout';
 import { useCamera } from '../features/booth/useCamera';
 import { aliveRef } from '../features/booth/cameraLifecycle';
 import { captureFrame } from '../features/booth/captureFrame';
 import useElementSize from '../hooks/useElementSize';
+import { useIsDesktop } from '../hooks/useIsDesktop';
 import CountdownOverlay from '../components/CountdownOverlay';
-import FilterPicker from '../components/FilterPicker';
 import BottomBar from '../components/BottomBar';
 
 /** Mirrors SetupScreen's samples so the flow works with an empty manifest. */
@@ -67,10 +66,28 @@ export default function CaptureScreen({
 
   const [captureState, setCaptureState] = useState<CaptureState>('idle');
   const [countdown, setCountdown] = useState<number | 'snap' | null>(null);
+  // Shown when a snap fails (previously silent) — includes the reason so a
+  // screenshot tells us exactly which step broke on the device.
+  const [captureError, setCaptureError] = useState<string | null>(null);
 
-  // Real camera
-  const { videoRef, status: cameraStatus, start: startCamera } = useCamera();
+  // Real camera (front / wide / ultra-wide where the device has them).
+  const {
+    videoRef,
+    status: cameraStatus,
+    start: startCamera,
+    mirrored,
+    devices,
+    cycleCamera,
+    zoomRange,
+    zoom,
+    setZoomLevel,
+  } = useCamera();
+  const showFlip = cameraStatus === 'ready' && devices.length > 1;
+  const showZoom = cameraStatus === 'ready' && zoomRange !== null;
+  const zoomStep = zoomRange ? Math.max((zoomRange.max - zoomRange.min) / 8, 0.1) : 0.5;
   const cameraRequestedRef = useRef(false);
+  // Upload fallback when the camera is blocked or missing.
+  const fileInputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     // Import the SAME ref object useCamera reads: the permission-prompt race
     // (stream resolving after Back) is handled there.
@@ -97,19 +114,27 @@ export default function CaptureScreen({
     }
     try {
       // The crop aspect always matches the on-screen preview (shotAspect.ts).
-      const blob = await captureFrame(video, mode === 'classic' ? layout : mode);
+      const blob = await captureFrame(video, mode === 'classic' ? layout : mode, mirrored);
       if (!aliveRef.current) return; // user left the screen mid-capture
       onAddShot(blob);
+      setCaptureError(null);
       setCaptureState('complete');
       setCountdown(null);
-    } catch {
+    } catch (err) {
       if (!aliveRef.current) return;
+      console.error('Capture failed:', err);
+      setCaptureError(
+        err instanceof Error
+          ? 'Shot failed (' + err.message + '). Tap Start to retry.'
+          : 'Shot failed. Tap Start to retry.',
+      );
       setCaptureState('idle');
       setCountdown(null);
     }
   }, [mode, layout, onAddShot, videoRef]);
 
   const startCountdown = useCallback(() => {
+    setCaptureError(null);
     setCaptureState('countdown');
     setCountdown(COUNTDOWN_SECONDS);
   }, []);
@@ -151,10 +176,10 @@ export default function CaptureScreen({
 
   // pose-match: the chosen reference photo for the current shot, in pick order.
   // Falls back to the sample palette when the manifest has no poses.
-  const poseSource = POSES.length > 0 ? POSES : SAMPLE_POSES;
+  const poseSource = [...getCustomPoses(), ...POSES];
   const currentPose =
     mode === 'pose-match'
-      ? poseSource.find(p => p.id === selectedPoses[displayIndex])
+      ? (poseSource.length > 0 ? poseSource : SAMPLE_POSES).find(p => p.id === selectedPoses[displayIndex])
       : undefined;
   const isRetake = retakeIndex !== null;
   // Session is done only when every shot exists — displayIndex is clamped for
@@ -162,6 +187,25 @@ export default function CaptureScreen({
   const sessionComplete = !isRetake && shots.length >= totalShots;
   const isLastShot = sessionComplete;
   const cameraDown = cameraStatus === 'denied' || cameraStatus === 'unavailable';
+
+  // Upload fallback: feed image files through the same onAddShot path (File
+  // is a Blob). Caps at the remaining shots, or 1 for a retake. When the
+  // session is filled (or it's a retake), go straight to Review.
+  const handleUploadFiles = useCallback(
+    (files: FileList | null) => {
+      if (!files || files.length === 0) return;
+      const remaining = isRetake ? 1 : Math.max(0, totalShots - shots.length);
+      const picked = Array.from(files)
+        .filter(f => f.type.startsWith('image/'))
+        .slice(0, Math.max(1, remaining));
+      if (picked.length === 0) return;
+      picked.forEach(f => onAddShot(f));
+      if (isRetake || shots.length + picked.length >= totalShots) {
+        onDone();
+      }
+    },
+    [isRetake, totalShots, shots.length, onAddShot, onDone],
+  );
 
   const handleNext = () => {
     if (isRetake || sessionComplete) {
@@ -178,10 +222,17 @@ export default function CaptureScreen({
   const isPose = mode === 'pose-match';
   const aspect = getShotAspect(mode, layout);
   const { ref: previewAreaRef, width: previewAreaW, height: previewAreaH } = useElementSize<HTMLDivElement>();
-  const box = fitBox(aspect, isPose ? (previewAreaW - 24) / 2 : previewAreaW, previewAreaH);
+  // Desktop: camera + reference sit side by side (half width each). Mobile:
+  // stacked (full width, half height each) so neither is crushed.
+  const isDesktop = useIsDesktop();
+  const box = fitBox(
+    aspect,
+    isDesktop && isPose ? (previewAreaW - 24) / 2 : previewAreaW,
+    !isDesktop && isPose ? (previewAreaH - 24) / 2 : previewAreaH,
+  );
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col">
+    <div className="flex-1 min-h-0 flex flex-col animate-screen-in">
       <div className="flex-1 min-h-0 flex flex-col gap-3 px-4 sm:px-10 pt-5 pb-2">
         {/* Progress bar */}
         <div className="shrink-0 flex items-center gap-2">
@@ -206,22 +257,64 @@ export default function CaptureScreen({
         {/* Preview area: camera (+ same-size reference in pose-match) */}
         <div
           ref={previewAreaRef}
-          className={['flex-1 min-h-0 flex items-center justify-center', isPose ? 'gap-6' : ''].join(' ')}
+          className={['flex-1 min-h-0 flex flex-col lg:flex-row items-center justify-center', isPose ? 'gap-4 lg:gap-6' : ''].join(' ')}
         >
           {/* Camera viewport — fitBox-sized at the exact crop aspect */}
           <div
             className="relative rounded-2xl overflow-hidden border-2 border-booth-border bg-booth-bg flex items-center justify-center"
             style={{ width: box.width || undefined, height: box.height || undefined }}
           >
-            {/* Live camera feed, mirrored like a booth mirror */}
+            {/* Live camera feed, mirrored for selfie lenses like a booth mirror */}
             <video
               ref={videoRef}
               autoPlay
               playsInline
               muted
               className="absolute inset-0 w-full h-full object-cover"
-              style={{ transform: 'scaleX(-1)', filter: getFilterCss(filterId) }}
+              style={{ transform: mirrored ? 'scaleX(-1)' : undefined }}
             />
+
+            {/* Lens switcher: front / wide / ultra-wide (only when there is a choice) */}
+            {showFlip && (
+              <button
+                onClick={cycleCamera}
+                aria-label="Switch camera"
+                title="Switch camera"
+                className="absolute top-3 right-3 z-10 w-10 h-10 rounded-full bg-white/85 backdrop-blur-sm flex items-center justify-center text-booth-text hover:scale-105 active:scale-95 transition-all duration-150"
+              >
+                <SwitchCamera size={18} strokeWidth={2} />
+              </button>
+            )}
+
+            {/* Lens zoom: out = wider selfie, in = closer (only when the lens allows it) */}
+            {showZoom && zoomRange && (
+              <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1 rounded-full bg-white/85 backdrop-blur-sm px-1.5 py-1">
+                <button
+                  onClick={() => setZoomLevel(zoom - zoomStep)}
+                  disabled={zoom <= zoomRange.min}
+                  aria-label="Zoom out"
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-booth-text hover:bg-booth-bg disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  <ZoomOut size={16} strokeWidth={2} />
+                </button>
+                <button
+                  onClick={() => setZoomLevel(zoomRange.min)}
+                  aria-label="Widest view"
+                  title="Widest view"
+                  className="min-w-10 h-9 px-1 rounded-full text-[11px] font-black text-booth-violet hover:bg-booth-bg"
+                >
+                  {zoom.toFixed(1)}x
+                </button>
+                <button
+                  onClick={() => setZoomLevel(zoom + zoomStep)}
+                  disabled={zoom >= zoomRange.max}
+                  aria-label="Zoom in"
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-booth-text hover:bg-booth-bg disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  <ZoomIn size={16} strokeWidth={2} />
+                </button>
+              </div>
+            )}
 
             {/* Fallback while the stream warms up */}
             {(cameraStatus === 'idle' || (cameraStatus !== 'ready' && !cameraDown)) && (
@@ -240,6 +333,11 @@ export default function CaptureScreen({
 
             {/* Countdown overlay */}
             <CountdownOverlay count={countdown} />
+
+            {/* Shutter flash on snap */}
+            {captureState === 'snap' && (
+              <div className="absolute inset-0 bg-white z-30 rounded-2xl animate-flash pointer-events-none" />
+            )}
 
             {/* "Complete" flash */}
             {captureState === 'complete' && (
@@ -280,12 +378,31 @@ export default function CaptureScreen({
                       : "We couldn't find a camera to use. Check that one is connected, then try again."}
                   </p>
                 </div>
-                <button
-                  onClick={startCamera}
-                  className="px-6 py-2 rounded-full bg-booth-violet text-white font-bold text-sm hover:scale-105 transition-all duration-150"
-                >
-                  Try again
-                </button>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => startCamera()}
+                    className="px-6 py-2 rounded-full bg-booth-violet text-white font-bold text-sm hover:scale-105 transition-all duration-150"
+                  >
+                    Try again
+                  </button>
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="flex items-center gap-2 px-6 py-2 rounded-full border-2 border-booth-border text-booth-muted font-bold text-sm hover:border-booth-violet hover:text-booth-violet transition-all duration-150"
+                  >
+                    <Upload size={16} strokeWidth={2} /> Upload photos
+                  </button>
+                </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  multiple={!isRetake}
+                  className="hidden"
+                  onChange={e => {
+                    handleUploadFiles(e.target.files);
+                    e.target.value = '';
+                  }}
+                />
               </div>
             )}
           </div>
@@ -304,9 +421,9 @@ export default function CaptureScreen({
             >
               {currentPose?.src ? (
                 <img
-                  src={import.meta.env.BASE_URL + currentPose.src}
+                  src={resolvePublicSrc(currentPose.src)}
                   alt="Reference pose"
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-fill bg-booth-bg"
                   draggable={false}
                 />
               ) : (
@@ -319,11 +436,11 @@ export default function CaptureScreen({
           )}
         </div>
 
-        {/* Live filter row: preview updates instantly (filter applies at render time). */}
-        <div className="shrink-0 flex items-center gap-3 flex-wrap justify-center">
-          <span className="text-xs font-black text-booth-text uppercase tracking-wider">Filter</span>
-          <FilterPicker value={filterId} onChange={onSetFilterId} />
-        </div>
+        {captureError && (
+          <p role="alert" className="shrink-0 text-center text-xs font-bold text-booth-rose px-6">
+            {captureError}
+          </p>
+        )}
       </div>
 
       {/* Pinned bottom bar: Back + Start always visible */}

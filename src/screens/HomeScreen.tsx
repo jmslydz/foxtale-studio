@@ -28,7 +28,7 @@ const FLOATIES = [
 
 export default function HomeScreen({ onSelect }: HomeScreenProps) {
   return (
-    <div className="flex-1 min-h-0 flex flex-col relative overflow-hidden">
+    <div className="flex-1 min-h-0 flex flex-col relative overflow-hidden animate-screen-in">
       {/* Decorative floating icons */}
       {FLOATIES.map(({ Icon, color }, i) => (
         <span
@@ -50,14 +50,14 @@ export default function HomeScreen({ onSelect }: HomeScreenProps) {
           src={`${import.meta.env.BASE_URL}brand/fox-logo.png`}
           alt="Foxtale Studio logo"
           draggable={false}
-          className="h-24 w-auto"
+          className="h-24 w-auto animate-fade-up"
         />
-        <h1 className="text-6xl md:text-7xl font-black tracking-tight text-booth-text">
+        <h1 className="text-center text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-booth-text px-4 animate-fade-up" style={{ animationDelay: '80ms' }}>
           <span className="text-booth-violet">Fox</span>tale Studio
         </h1>
 
         {/* Mode cards: one row on desktop */}
-        <div className="flex items-center gap-6 flex-wrap justify-center px-4">
+        <div className="flex items-center gap-6 flex-wrap justify-center px-4 animate-fade-up" style={{ animationDelay: '160ms' }}>
           <ModeCard
             title="Classic Booth"
             description="Choose your layout — 3 or 4 shots portrait, or a 2×2 landscape grid."
@@ -68,10 +68,10 @@ export default function HomeScreen({ onSelect }: HomeScreenProps) {
             onClick={() => onSelect('classic')}
           />
 
-          <div className="flex flex-col items-center gap-2 text-booth-muted">
-            <div className="w-px h-16 bg-booth-border" />
+          <div className="flex flex-row sm:flex-col items-center justify-center gap-2 w-full sm:w-auto text-booth-muted">
+            <div className="h-px w-16 sm:h-16 sm:w-px bg-booth-border" />
             <span className="text-xs font-bold tracking-widest uppercase">or</span>
-            <div className="w-px h-16 bg-booth-border" />
+            <div className="h-px w-16 sm:h-16 sm:w-px bg-booth-border" />
           </div>
 
           <ModeCard
@@ -84,10 +84,10 @@ export default function HomeScreen({ onSelect }: HomeScreenProps) {
             onClick={() => onSelect('pose-match')}
           />
 
-          <div className="flex flex-col items-center gap-2 text-booth-muted">
-            <div className="w-px h-16 bg-booth-border" />
+          <div className="flex flex-row sm:flex-col items-center justify-center gap-2 w-full sm:w-auto text-booth-muted">
+            <div className="h-px w-16 sm:h-16 sm:w-px bg-booth-border" />
             <span className="text-xs font-bold tracking-widest uppercase">or</span>
-            <div className="w-px h-16 bg-booth-border" />
+            <div className="h-px w-16 sm:h-16 sm:w-px bg-booth-border" />
           </div>
 
           <ModeCard

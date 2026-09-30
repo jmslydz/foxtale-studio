@@ -9,12 +9,13 @@ export const FRAME_ASPECT = SHOT_ASPECT;
 
 /**
  * Draws the current frame of a <video> element onto a canvas, center-cropped
- * to the strip's frame aspect ratio and mirrored to match the scaleX(-1)
- * preview, then encodes it as a JPEG blob.
+ * to the strip's frame aspect ratio and mirrored (selfie lenses only) to
+ * match the scaleX(-1) preview, then encodes it as a JPEG blob.
  */
 export function captureFrame(
   video: HTMLVideoElement,
   layout: Layout | 'pose-match' | 'polaroid',
+  mirrored = true,
 ): Promise<Blob> {
   return new Promise((resolve, reject) => {
     const aspect = FRAME_ASPECT[layout];
@@ -35,6 +36,10 @@ export function captureFrame(
     }
     const cropX = (videoW - cropW) / 2;
     const cropY = (videoH - cropH) / 2;
+    if (!Number.isFinite(cropW) || !Number.isFinite(cropH) || cropW < 2 || cropH < 2) {
+      reject(new Error(`bad crop ${Math.round(cropW)}x${Math.round(cropH)} from ${videoW}x${videoH}`));
+      return;
+    }
 
     // Native resolution: crop dimensions straight from the video frame —
     // never downscaled. The preview <video> is mirrored with CSS, so the
@@ -50,21 +55,42 @@ export function captureFrame(
     }
     ctx.imageSmoothingQuality = 'high';
 
-    // Mirror horizontally so the saved photo matches the mirrored preview.
-    ctx.translate(canvas.width, 0);
-    ctx.scale(-1, 1);
-    ctx.drawImage(video, cropX, cropY, cropW, cropH, 0, 0, canvas.width, canvas.height);
+    // Mirror selfie lenses so the saved photo matches the mirrored preview;
+    // rear/wide lenses stay as-is.
+    if (mirrored) {
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+    }
+    try {
+      ctx.drawImage(video, cropX, cropY, cropW, cropH, 0, 0, canvas.width, canvas.height);
+    } catch (e) {
+      reject(new Error(`frame grab failed (${(e as Error)?.message ?? 'drawImage'})`));
+      return;
+    }
 
-    canvas.toBlob(
-      blob => {
-        if (blob) {
-          resolve(blob);
-        } else {
-          reject(new Error('Failed to encode captured frame'));
+    // Encode with fallbacks: some phone browsers return null for JPEG blobs
+    // (memory/format quirks) yet succeed with PNG or data URLs.
+    const toBlob = (type: string, quality?: number) =>
+      new Promise<Blob | null>(resolve => {
+        try {
+          canvas.toBlob(b => resolve(b), type, quality);
+        } catch {
+          resolve(null);
         }
-      },
-      'image/jpeg',
-      0.95,
-    );
+      });
+    (async () => {
+      const jpeg = await toBlob('image/jpeg', 0.95);
+      if (jpeg && jpeg.size > 0) return jpeg;
+      const png = await toBlob('image/png');
+      if (png && png.size > 0) return png;
+      try {
+        const res = await fetch(canvas.toDataURL('image/jpeg', 0.9));
+        const dataBlob = await res.blob();
+        if (dataBlob.size > 0) return dataBlob;
+      } catch {
+        // fall through to the error below
+      }
+      throw new Error('photo encoder returned nothing');
+    })().then(resolve, reject);
   });
 }

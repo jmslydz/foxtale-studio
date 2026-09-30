@@ -1,5 +1,7 @@
 import { type Layout, type Mode, type PlacedSticker, type Shot, PASTEL_PHOTO_COLORS, STICKER_SIZE_MIN, STICKER_SIZE_MAX } from '../types';
+import { resolvePublicSrc } from '../stickerCatalog';
 import { getFilterCss } from '../lib/filters';
+import { autoBrandColor } from '../lib/brandColor';
 import { getPoseMatchGrid } from '../lib/poseMatchGrid';
 import useElementWidth from '../hooks/useElementWidth';
 import StickerGlyph from './stickers/StickerGlyph';
@@ -39,6 +41,10 @@ interface StripPreviewProps {
   containerRef?: React.RefObject<HTMLDivElement | null>;
   /** Drag-to-bin: shown while a sticker is being dragged. */
   onStickerDragStateChange?: (dragging: boolean) => void;
+  /** Tap-a-photo-to-retake (review): fired with the SHOT index, never references. */
+  onShotTap?: (index: number) => void;
+  /** Footer brand color; defaults to an auto pick from the strip color. */
+  brandColor?: string;
 }
 
 const TILT_ANGLES = [-1.5, 1.0, -0.8, 1.3, -1.1];
@@ -77,7 +83,7 @@ function PoseReferenceCell({
     >
       {ref?.src && (
         <img
-          src={import.meta.env.BASE_URL + ref.src}
+          src={resolvePublicSrc(ref.src)}
           alt={ref.label}
           className="w-full h-full object-cover"
           draggable={false}
@@ -95,6 +101,7 @@ function PhotoFrame({
   tilt,
   filterId,
   className,
+  onTap,
 }: {
   colorIndex: number;
   shot?: Shot;
@@ -104,18 +111,25 @@ function PhotoFrame({
   /** Filter applies to the USER's shot only, never to references. */
   filterId?: string;
   className?: string;
+  /** Tap-a-photo-to-retake (review): makes the frame tappable. */
+  onTap?: () => void;
 }) {
   const palette = PASTEL_PHOTO_COLORS[colorIndex % PASTEL_PHOTO_COLORS.length];
   const bg = `linear-gradient(135deg, ${palette.from}, ${palette.to})`;
   return (
     <div
       data-cell
+      onClick={onTap}
+      role={onTap ? 'button' : undefined}
+      aria-label={onTap ? 'Retake this shot' : undefined}
+      title={onTap ? 'Tap to retake this shot' : undefined}
       className={['rounded-sm overflow-hidden flex-shrink-0', className].join(' ')}
       style={{
         width,
         height,
         background: bg,
         transform: tilt ? `rotate(${tilt}deg)` : undefined,
+        cursor: onTap ? 'pointer' : undefined,
       }}
     >
       {/* Real captured photo over the pastel fallback */}
@@ -153,6 +167,8 @@ export default function StripPreview({
   onCanvasClick,
   containerRef,
   onStickerDragStateChange,
+  onShotTap,
+  brandColor,
 }: StripPreviewProps) {
   const today = new Date().toLocaleDateString('en-US', {
     month: 'short',
@@ -205,7 +221,7 @@ export default function StripPreview({
         return (
           <div style={{ display: 'flex', flexDirection: 'column', gap }}>
             <PoseReferenceCell row={0} poseRefs={poseRefs} width={frameW} height={frameH} />
-            <PhotoFrame colorIndex={0} shot={shots[0]} width={frameW} height={frameH} filterId={filterId} />
+            <PhotoFrame colorIndex={0} shot={shots[0]} width={frameW} height={frameH} filterId={filterId} onTap={onShotTap ? () => onShotTap(0) : undefined} />
           </div>
         );
       }
@@ -220,6 +236,7 @@ export default function StripPreview({
                 width={frameW}
                 height={frameH}
                 filterId={filterId}
+                onTap={onShotTap ? () => onShotTap(row) : undefined}
               />
               <PoseReferenceCell row={row} poseRefs={poseRefs} width={frameW} height={frameH} />
             </div>
@@ -243,6 +260,7 @@ export default function StripPreview({
                   height={frameH}
                   tilt={tilted ? TILT_ANGLES[i] : undefined}
                   filterId={filterId}
+                  onTap={onShotTap ? () => onShotTap(i) : undefined}
                 />
               ))}
             </div>
@@ -263,6 +281,7 @@ export default function StripPreview({
             height={frameH}
             tilt={tilted ? TILT_ANGLES[i] : undefined}
             filterId={filterId}
+            onTap={onShotTap ? () => onShotTap(i) : undefined}
           />
         ))}
       </div>
@@ -273,7 +292,7 @@ export default function StripPreview({
     <div
       ref={el => {
         containerRef && (containerRef.current = el);
-        widthRef.current = el;
+        widthRef(el);
       }}
       data-testid="strip-canvas"
       onClick={onCanvasClick}
@@ -282,7 +301,7 @@ export default function StripPreview({
         height: stripH,
         background: bgColor || '#FFFFFF',
         backgroundImage: bgImage
-          ? `url(${import.meta.env.BASE_URL + bgImage})`
+          ? `url(${resolvePublicSrc(bgImage)})`
           : undefined,
         backgroundSize: bgImage ? 'cover' : undefined,
         backgroundPosition: bgImage ? 'center' : undefined,
@@ -350,20 +369,17 @@ export default function StripPreview({
             {today}
           </span>
         )}
-        {layout === 'pose-match' && (
-          <span
-            style={{
-              fontSize: Math.round(7 * scale),
-              // Fox orange — matches the printed footer in the PNG export
-              // (renderStrip.ts draws the same color for pose strips).
-              color: '#FF8A3D',
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
-            }}
-          >
-            Foxtale Studio
-          </span>
-        )}
+        {/* Studio brand footer on every strip (color matches the PNG export). */}
+        <span
+          style={{
+            fontSize: Math.round(7 * scale),
+            color: brandColor ?? autoBrandColor(bgColor),
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+          }}
+        >
+          Foxtale Studio
+        </span>
       </div>
 
       {/* Stickers */}

@@ -1,5 +1,6 @@
 import { type Mode, type Layout, type PlacedSticker, type PlacedPolaroid, type Shot } from '../types';
-import { findStickerDef } from '../stickerCatalog';
+import { findStickerDef, resolvePublicSrc } from '../stickerCatalog';
+import { autoBrandColor } from './brandColor';
 import { getFilterCss } from './filters';
 import { getPoseMatchGrid } from './poseMatchGrid';
 import { layoutPolaroidText } from './polaroidText';
@@ -43,6 +44,8 @@ export interface RenderStripOptions {
   polaroids: PlacedPolaroid[];
   /** Render scale; 2 gives a crisp 2x export. */
   scale?: number;
+  /** Footer brand color; defaults to an auto pick from the strip color. */
+  brandColor?: string;
 }
 
 export function todayLabel(): string {
@@ -163,7 +166,7 @@ async function drawStrip(
   const gap = Math.round(4 * scale);
   const captionH = Math.round(44 * scale);
   const bgImg = opts.bgImage
-    ? await loadImageSafe(`${import.meta.env.BASE_URL}${opts.bgImage}`).catch(() => null)
+    ? await loadImageSafe(resolvePublicSrc(opts.bgImage)).catch(() => null)
     : null;
 
   drawBackground(ctx, W, H, opts.bgColor, bgImg);
@@ -190,7 +193,7 @@ async function drawStrip(
         const ref = opts.poseRefs[row];
         if (ref?.src) {
           try {
-            const img = await loadImageSafe(`${import.meta.env.BASE_URL}${ref.src}`);
+            const img = await loadImageSafe(resolvePublicSrc(ref.src));
             drawCover(ctx, img, x, y, frameW, frameH);
           } catch {
             ctx.fillStyle = PASTELS[row % PASTELS.length];
@@ -237,11 +240,10 @@ async function drawStrip(
     ctx.fillStyle = opts.bgColor === '#2A1A2A' ? '#AAAAAA' : '#9A8A9A';
     ctx.fillText(todayLabel(), W / 2, centerY + (opts.caption ? Math.round(6 * scale) : 0));
   }
-  if (isPose) {
-    ctx.font = `400 ${Math.round(7 * scale)}px ${FONT_STACK}`;
-    ctx.fillStyle = opts.bgColor === '#2A1A2A' ? '#888888' : '#B0A0B0';
-    ctx.fillText('FOXTALE STUDIO', W / 2, centerY + (opts.caption || opts.showDate ? Math.round(15 * scale) : 0));
-  }
+  // Studio brand footer on every strip (same color rule as the preview).
+  ctx.font = `400 ${Math.round(7 * scale)}px ${FONT_STACK}`;
+  ctx.fillStyle = opts.brandColor ?? autoBrandColor(opts.bgColor);
+  ctx.fillText('FOXTALE STUDIO', W / 2, centerY + (opts.caption || opts.showDate ? Math.round(15 * scale) : 0));
   ctx.restore();
 }
 
@@ -253,7 +255,7 @@ async function drawPolaroid(
   H: number,
 ) {
   const bgImg = opts.bgImage
-    ? await loadImageSafe(`${import.meta.env.BASE_URL}${opts.bgImage}`).catch(() => null)
+    ? await loadImageSafe(resolvePublicSrc(opts.bgImage)).catch(() => null)
     : null;
   drawBackground(ctx, W, H, opts.bgColor, bgImg);
 
@@ -329,7 +331,7 @@ function stickerDraw(
   const dataUrl = opts.stickerImages.get(s.stickerId);
   if (dataUrl) return { kind: 'image', src: dataUrl, size };
   const def = findStickerDef(s.stickerId);
-  if (def?.src) return { kind: 'image', src: `${import.meta.env.BASE_URL}${def.src}`, size };
+  if (def?.src) return { kind: 'image', src: resolvePublicSrc(def.src), size };
   return { kind: 'emoji', char: def?.emoji ?? '✨', size: size * 0.9 };
 }
 

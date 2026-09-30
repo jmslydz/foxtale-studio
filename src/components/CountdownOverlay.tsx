@@ -26,6 +26,7 @@ export default function CountdownOverlay({ count }: CountdownOverlayProps) {
       style={{ background: `${bg}CC`, backdropFilter: 'blur(2px)' }}
     >
       <div
+        key={key}
         className="flex flex-col items-center gap-1"
         style={{
           animation: isSnap ? 'none' : 'countPop 0.35s cubic-bezier(0.34,1.56,0.64,1) both',

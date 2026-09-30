@@ -1,13 +1,15 @@
-import { useRef, useState, useCallback } from 'react';
-import { Trash2 } from 'lucide-react';
+import { useRef, useState, useCallback, useEffect } from 'react';
+import { Trash2, ZoomIn, ZoomOut, Maximize2, X, Upload } from 'lucide-react';
 import { type Mode, type Layout, type PlacedSticker, type PlacedPolaroid, type Shot, PASTEL_PHOTO_COLORS } from '../types';
-import { ALL_STICKER_CATEGORIES, POSES } from '../stickerCatalog';
+import { getAllStickerCategories, addCustomStickers, findPose } from '../stickerCatalog';
 import { startMove } from '../hooks/useTransformGestures';
 import useElementSize from '../hooks/useElementSize';
 import { fitBox } from '../lib/fitLayout';
 import { getPoseMatchGrid } from '../lib/poseMatchGrid';
 import BottomBar from '../components/BottomBar';
+import CollapsiblePanel from '../components/CollapsiblePanel';
 import BackgroundPicker from '../components/BackgroundPicker';
+import { BRAND_SWATCHES, BRAND_AUTO } from '../lib/brandColor';
 import FilterPicker from '../components/FilterPicker';
 import PolaroidCanvas from '../components/PolaroidCanvas';
 import StickerTile from '../components/StickerTile';
@@ -27,6 +29,9 @@ interface EditorScreenProps {
   showDate: boolean;
   /** ONE session-wide filter for the user's shots. */
   filterId: string;
+  /** Studio brand footer: 'auto' or hex (picker), plus the resolved color. */
+  brandSetting: string;
+  brandColor: string;
   selectedStickerId: string | null;
   polaroids: PlacedPolaroid[];
   selectedPolaroidId: string | null;
@@ -43,6 +48,7 @@ interface EditorScreenProps {
   onSetCaption: (t: string) => void;
   onSetShowDate: (v: boolean) => void;
   onSetFilterId: (id: string) => void;
+  onSetBrandSetting: (v: string) => void;
   onSelectPolaroid: (id: string | null) => void;
   onMovePolaroid: (id: string, x: number, y: number) => void;
   onResizePolaroid: (id: string, width: number) => void;
@@ -64,6 +70,8 @@ export default function EditorScreen({
   caption,
   showDate,
   filterId,
+  brandSetting,
+  brandColor,
   selectedStickerId,
   polaroids,
   selectedPolaroidId,
@@ -78,6 +86,7 @@ export default function EditorScreen({
   onSetCaption,
   onSetShowDate,
   onSetFilterId,
+  onSetBrandSetting,
   onSelectPolaroid,
   onMovePolaroid,
   onResizePolaroid,
@@ -92,6 +101,51 @@ export default function EditorScreen({
   // Set when a pointer drag just ended, so the trailing click doesn't deselect.
   const justDraggedRef = useRef(false);
   const [activeStickerCategory, setActiveStickerCategory] = useState(0);
+  // Phone: the settings panel minimizes so the canvas gets the screen.
+  const [panelOpen, setPanelOpen] = useState(true);
+  const stickerCats = getAllStickerCategories();
+  const stickerUploadRef = useRef<HTMLInputElement>(null);
+
+  /** Save → upload: image files become session stickers in "My Stickers". */
+  const handleStickerUpload = (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const imgs = Array.from(files).filter(f => f.type.startsWith('image/'));
+    if (imgs.length === 0) return;
+    addCustomStickers(
+      imgs.map(f => ({
+        src: URL.createObjectURL(f),
+        label: f.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ').trim() || 'My sticker',
+      })),
+    );
+    const cats = getAllStickerCategories();
+    const mine = cats.findIndex(c => c.name === 'My Stickers');
+    if (mine !== -1) setActiveStickerCategory(mine);
+  };
+  // Canvas zoom (1 = fit): enlarges the strip so small stickers get bigger
+  // touch targets and finer drags. Positions stay in % units, so zoom never
+  // affects the export — it only changes the on-screen size.
+  const [zoom, setZoom] = useState(1);
+  const zoomIn = useCallback(() => setZoom(z => Math.min(3, Math.round((z + 0.5) * 10) / 10)), []);
+  const zoomOut = useCallback(() => setZoom(z => Math.max(1, Math.round((z - 0.5) * 10) / 10)), []);
+  const zoomReset = useCallback(() => setZoom(1), []);
+  // Fullscreen popup editor: tap the expand button to edit big, pinch-free.
+  // Only ONE canvas is ever mounted (main xor modal), so the shared
+  // container/bin refs always point at the visible one.
+  const [zoomOpen, setZoomOpen] = useState(false);
+  const { ref: modalPaneRef, width: modalW, height: modalH } = useElementSize<HTMLDivElement>();
+  const openZoom = useCallback(() => { setZoom(1); setZoomOpen(true); }, []);
+  const closeZoom = useCallback(() => setZoomOpen(false), []);
+  useEffect(() => {
+    if (!zoomOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setZoomOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [zoomOpen]);
   // While a sticker/card drag is live the bin fades in over the canvas.
   const [dragging, setDragging] = useState(false);
   const [binHover, setBinHover] = useState(false);
@@ -177,7 +231,7 @@ export default function EditorScreen({
   const poseRefs =
     mode === 'pose-match'
       ? Array.from({ length: poseCount }).map((_, i) => {
-          const pose = POSES.find(p => p.id === poseIds[i]);
+          const pose = findPose(poseIds[i]);
           if (pose) return { label: pose.label, src: pose.src };
           const c = PASTEL_PHOTO_COLORS[i % PASTEL_PHOTO_COLORS.length];
           return { label: `Sample ${i + 1}`, color: `linear-gradient(135deg, ${c.from}, ${c.to})` };
@@ -220,12 +274,19 @@ export default function EditorScreen({
 
   // fitBox: the strip is as large as the center pane allows (48px breathing room).
   const box = fitBox(canvasAspect, paneW - 48, paneH - 48);
+  // Same fit inside the fullscreen popup (48px breathing room for the p-6 frame).
+  const modalBox = fitBox(canvasAspect, Math.max(0, modalW - 48), Math.max(0, modalH - 48));
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col">
+    <div className="flex-1 min-h-0 flex flex-col animate-screen-in">
       <div className="flex-1 min-h-0 flex flex-col lg:flex-row overflow-hidden">
       {/* Left panel: stacked sections in one column; scrolls inside itself if tall */}
       <div className="w-full lg:w-60 shrink-0 border-b lg:border-b-0 lg:border-r border-booth-border bg-white flex flex-col overflow-y-auto">
+        <CollapsiblePanel
+          title="Canvas settings"
+          open={panelOpen}
+          onToggle={() => setPanelOpen(o => !o)}
+        >
         <div className="shrink-0 p-4 flex flex-col gap-5">
           {/* Strip color + Strip image */}
           <BackgroundPicker
@@ -235,6 +296,36 @@ export default function EditorScreen({
             onSetBgColor={onSetBgColor}
             onSetBgImage={onSetBgImage}
           />
+
+          {/* Studio brand footer color (Auto reads the background) */}
+          <div className="flex flex-col gap-3">
+            <p className="text-xs font-black text-booth-text uppercase tracking-wider">Brand</p>
+            <div className="flex flex-wrap gap-2">
+              {BRAND_SWATCHES.map(s => {
+                const selected = brandSetting === s.value;
+                const dotColor = s.value === BRAND_AUTO ? brandColor : s.value;
+                return (
+                  <button
+                    key={s.value}
+                    onClick={() => onSetBrandSetting(s.value)}
+                    title={s.label === 'Auto' ? 'Auto (matches the background)' : s.label}
+                    className={[
+                      'flex items-center gap-1.5 pl-1.5 pr-2.5 py-1 rounded-full text-xs font-bold transition-all duration-150 border',
+                      selected
+                        ? 'border-booth-violet bg-booth-lavender/40 text-booth-violet'
+                        : 'border-booth-border text-booth-muted hover:border-booth-lavender hover:text-booth-violet',
+                    ].join(' ')}
+                  >
+                    <span
+                      className="w-5 h-5 rounded-full border border-black/10"
+                      style={{ background: dotColor }}
+                    />
+                    {s.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
           {/* Filter */}
           <div className="flex flex-col gap-3">
@@ -295,15 +386,16 @@ export default function EditorScreen({
             </button>
           </div>
         </div>
+        </CollapsiblePanel>
       </div>
 
-      {/* Center: strip canvas, fitBox-sized */}
+      {/* Center: strip canvas, fitBox-sized (× zoom). Scrolls when zoomed in. */}
       <div
         ref={paneRef}
-        className="flex-1 min-w-0 min-h-[320px] lg:min-h-0 flex items-center justify-center bg-[#F7F0F7] overflow-hidden relative"
+        className="flex-1 min-w-0 min-h-[320px] lg:min-h-0 bg-[#F7F0F7] relative"
         onClick={clearSelections}
       >
-        {/* Grid background */}
+        {/* Grid background (stays put while the zoomed canvas scrolls) */}
         <div
           className="absolute inset-0 pointer-events-none opacity-30"
           style={{
@@ -313,6 +405,11 @@ export default function EditorScreen({
           }}
         />
 
+        {/* Scrolls only when zoomed past fit — bars always hidden, pan by touch */}
+        <div className={['absolute inset-0 flex no-scrollbar', zoom === 1 ? 'overflow-hidden' : 'overflow-auto'].join(' ')}>
+
+        {!zoomOpen && (
+          <>
         {/* Drag-to-bin: fades in while a sticker is being dragged. */}
         <div
           ref={binRef}
@@ -338,9 +435,10 @@ export default function EditorScreen({
           <Trash2 size={24} strokeWidth={1.75} color="#3A2A3A" />
         </div>
 
-        {/* Strip at fitBox size — stickers are % of canvas width, so they scale too */}
+        {/* Strip at fitBox size × zoom — stickers are % of canvas width, so they scale too.
+            m-auto centers when it fits and scrolls correctly when zoomed. */}
         {box.width > 0 && (
-          <div className="relative z-10">
+          <div className="relative z-10 m-auto p-6">
             {mode === 'polaroid' ? (
               <PolaroidCanvas
                 polaroids={polaroids}
@@ -351,7 +449,7 @@ export default function EditorScreen({
                 caption={caption}
                 showDate={showDate}
                 filterId={filterId}
-                height={box.height}
+                height={box.height * zoom}
                 interactive
                 selectedPolaroidId={selectedPolaroidId}
                 selectedStickerId={selectedStickerId}
@@ -376,13 +474,14 @@ export default function EditorScreen({
                 caption={caption}
                 showDate={showDate}
                 filterId={filterId}
+                brandColor={brandColor}
                 poseRefs={poseRefs}
                 // THE authoritative pose count: never derive the grid from
                 // array lengths (that minted phantom rows for 1 pose).
                 poseCount={poseCount}
-                // Render at the fitBox width: StripPreview derives strip px
+                // Render at the fitBox width × zoom: StripPreview derives strip px
                 // from `scale`, so scale = target width / intrinsic width.
-                scale={box.width / intrinsicW}
+                scale={(box.width / intrinsicW) * zoom}
                 interactive
                 selectedStickerId={selectedStickerId}
                 onStickerPointerDown={handleStickerPointerDown}
@@ -396,6 +495,163 @@ export default function EditorScreen({
             )}
           </div>
         )}
+          </>
+        )}
+        {zoomOpen && (
+          <div className="relative m-auto p-6">
+            <p className="text-sm font-bold text-booth-muted bg-white/80 rounded-full px-5 py-2.5">
+              Editing fullscreen…
+            </p>
+          </div>
+        )}
+        </div>
+
+        {/* Expand button: opens the fullscreen popup editor. */}
+        {!zoomOpen && (
+          <button
+            onClick={e => { e.stopPropagation(); openZoom(); }}
+            aria-label="Open fullscreen editor"
+            className="absolute bottom-3 right-3 z-40 w-11 h-11 rounded-full border border-booth-border bg-white/95 shadow-lg flex items-center justify-center text-booth-text hover:scale-105 transition-all duration-150"
+          >
+            <Maximize2 size={18} strokeWidth={2} />
+          </button>
+        )}
+
+        {/* Fullscreen popup editor: big canvas, zoom controls, same stickers. */}
+        {zoomOpen && (
+          <div className="fixed inset-0 z-50 flex flex-col bg-[#2A1F2E]/90 backdrop-blur-sm">
+            <div className="shrink-0 flex items-center justify-between px-4 py-3">
+              <span className="font-black text-white">Edit canvas</span>
+              <button
+                onClick={closeZoom}
+                aria-label="Close fullscreen editor"
+                className="w-10 h-10 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-all duration-150"
+              >
+                <X size={20} strokeWidth={2} />
+              </button>
+            </div>
+
+            <div
+              ref={modalPaneRef}
+              className="flex-1 min-h-0 overflow-auto no-scrollbar flex relative"
+              onClick={clearSelections}
+            >
+              {/* Drag-to-bin for the popup canvas */}
+              <div
+                ref={binRef}
+                style={{
+                  position: 'absolute',
+                  bottom: 18,
+                  left: '50%',
+                  transform: `translateX(-50%) scale(${binHover ? 1.12 : 1})`,
+                  width: 56,
+                  height: 56,
+                  borderRadius: '50%',
+                  background: binHover ? '#FF8FA8' : '#FFB3C8',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  opacity: dragging ? 1 : 0,
+                  pointerEvents: 'none',
+                  transition: 'opacity 200ms ease, transform 150ms ease, background 150ms ease',
+                  boxShadow: '0 4px 16px rgba(58,42,58,0.18)',
+                  zIndex: 40,
+                }}
+              >
+                <Trash2 size={24} strokeWidth={1.75} color="#3A2A3A" />
+              </div>
+
+              {modalBox.width > 0 && (
+                <div className="relative m-auto p-6">
+                  {mode === 'polaroid' ? (
+                    <PolaroidCanvas
+                      polaroids={polaroids}
+                      shots={shots}
+                      bgColor={bgColor}
+                      bgImage={bgImage}
+                      stickers={stickers}
+                      caption={caption}
+                      showDate={showDate}
+                      filterId={filterId}
+                      height={modalBox.height * zoom}
+                      interactive
+                      selectedPolaroidId={selectedPolaroidId}
+                      selectedStickerId={selectedStickerId}
+                      onPolaroidPointerDown={handlePolaroidPointerDown}
+                      onPolaroidResize={onResizePolaroid}
+                      onPolaroidRotateAbs={onRotatePolaroidAbs}
+                      onStickerPointerDown={handleStickerPointerDown}
+                      onStickerResizePct={onResizeStickerPct}
+                      onStickerRotateAbs={onRotateStickerAbs}
+                      onStickerDelete={onDeleteSticker}
+                      onCanvasClick={clearSelections}
+                      containerRef={containerRef}
+                      onStickerDragStateChange={setDragging}
+                    />
+                  ) : (
+                    <StripPreview
+                      layout={mode === 'pose-match' ? 'pose-match' : layout}
+                      shots={shots}
+                      bgColor={bgColor}
+                      bgImage={bgImage}
+                      stickers={stickers}
+                      caption={caption}
+                      showDate={showDate}
+                      filterId={filterId}
+                      brandColor={brandColor}
+                      poseRefs={poseRefs}
+                      poseCount={poseCount}
+                      scale={(modalBox.width / intrinsicW) * zoom}
+                      interactive
+                      selectedStickerId={selectedStickerId}
+                      onStickerPointerDown={handleStickerPointerDown}
+                      onStickerResizePct={onResizeStickerPct}
+                      onStickerRotateAbs={onRotateStickerAbs}
+                      onStickerDelete={onDeleteSticker}
+                      onCanvasClick={clearSelections}
+                      containerRef={containerRef}
+                      onStickerDragStateChange={setDragging}
+                    />
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div className="shrink-0 flex items-center justify-center gap-3 px-4 py-3">
+              <div className="flex items-center gap-1 rounded-full bg-white/10 px-1.5 py-1">
+                <button
+                  onClick={zoomOut}
+                  disabled={zoom <= 1}
+                  aria-label="Zoom out"
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  <ZoomOut size={18} strokeWidth={2} />
+                </button>
+                <button
+                  onClick={zoomReset}
+                  aria-label="Reset zoom"
+                  className="min-w-12 h-10 px-1 rounded-full text-xs font-black text-white hover:bg-white/10"
+                >
+                  {Math.round(zoom * 100)}%
+                </button>
+                <button
+                  onClick={zoomIn}
+                  disabled={zoom >= 3}
+                  aria-label="Zoom in"
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  <ZoomIn size={18} strokeWidth={2} />
+                </button>
+              </div>
+              <button
+                onClick={closeZoom}
+                className="px-6 py-2.5 rounded-full bg-booth-violet text-white font-bold text-sm hover:scale-105 transition-all duration-150"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Right panel: one vertical column — wraps; scrolls inside itself if tall */}
@@ -404,7 +660,7 @@ export default function EditorScreen({
         <div className="shrink-0 px-4 pt-4 pb-3 border-b border-booth-border">
           <p className="text-xs font-black text-booth-text uppercase tracking-wider mb-2">Stickers</p>
           <div className="flex flex-wrap gap-2">
-            {ALL_STICKER_CATEGORIES.map((cat, i) => (
+            {stickerCats.map((cat, i) => (
               <button
                 key={cat.name}
                 onClick={() => setActiveStickerCategory(i)}
@@ -424,10 +680,18 @@ export default function EditorScreen({
         {/* Tile grid: fills remaining height, scrolls inside itself if needed */}
         <div className="flex-1 min-h-0 overflow-y-auto px-4 py-3">
           <p className="text-xs font-bold text-booth-muted uppercase tracking-wider mb-2">
-            {ALL_STICKER_CATEGORIES[activeStickerCategory]?.name}
+            {(stickerCats[activeStickerCategory] ?? stickerCats[0])?.name}
           </p>
           <div className="grid grid-cols-4 gap-2">
-            {ALL_STICKER_CATEGORIES[activeStickerCategory]?.stickers.map(s => (
+            <button
+              onClick={() => stickerUploadRef.current?.click()}
+              title="Upload your own sticker"
+              className="aspect-square rounded-xl border-2 border-dashed border-booth-lavender text-booth-violet flex flex-col items-center justify-center gap-0.5 hover:border-booth-violet hover:bg-booth-lavender/30 transition-all duration-150"
+            >
+              <Upload size={16} strokeWidth={2.5} />
+              <span className="text-[9px] font-bold leading-none">Upload</span>
+            </button>
+            {(stickerCats[activeStickerCategory] ?? stickerCats[0])?.stickers.map(s => (
               <StickerTile
                 key={s.id}
                 sticker={s}
@@ -435,13 +699,25 @@ export default function EditorScreen({
               />
             ))}
           </div>
+          <input
+            ref={stickerUploadRef}
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={e => {
+              handleStickerUpload(e.target.files);
+              e.target.value = '';
+            }}
+          />
         </div>
 
-        {/* "On strip (N)": same thumbnail size, row wraps; pinned at bottom */}
+        {/* "On strip (N)": same thumbnail size, row wraps, scrolls inside itself
+            so piling on stickers never stretches the screen */}
         <div className="shrink-0 border-t border-booth-border px-4 py-3">
           <p className="text-xs font-bold text-booth-muted mb-1.5">On strip ({stickers.length})</p>
           {stickers.length > 0 ? (
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto">
               {stickers.map(s => (
                 <button
                   key={s.id}

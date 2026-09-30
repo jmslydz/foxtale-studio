@@ -9,7 +9,7 @@ import {
   Heart as HeartIcon,
 } from 'lucide-react';
 import { type Mode, type Layout, type PlacedSticker, type PlacedPolaroid, type Shot, PASTEL_PHOTO_COLORS } from '../types';
-import { POSES, findStickerDef } from '../stickerCatalog';
+import { findPose, findStickerDef } from '../stickerCatalog';
 import StripPreview from '../components/StripPreview';
 import PolaroidCanvas from '../components/PolaroidCanvas';
 import StickerGlyph from '../components/stickers/StickerGlyph';
@@ -43,6 +43,8 @@ interface DoneScreenProps {
   showDate: boolean;
   /** ONE session-wide filter for the user's shots (preview + export). */
   filterId: string;
+  /** Resolved studio brand footer color (preview + export share it). */
+  brandColor: string;
   polaroids: PlacedPolaroid[];
   /** Back to the Editor — every edit is kept in App state. */
   onBack: () => void;
@@ -60,6 +62,7 @@ export default function DoneScreen({
   caption,
   showDate,
   filterId,
+  brandColor,
   polaroids,
   onBack,
   onStartOver,
@@ -80,7 +83,7 @@ export default function DoneScreen({
   const poseRefs =
     mode === 'pose-match'
       ? Array.from({ length: poseCount }).map((_, i) => {
-          const pose = POSES.find(p => p.id === poseIds[i]);
+          const pose = findPose(poseIds[i]);
           if (pose) return { label: pose.label, src: pose.src };
           const c = PASTEL_PHOTO_COLORS[i % PASTEL_PHOTO_COLORS.length];
           return { label: `Sample ${i + 1}`, color: `linear-gradient(135deg, ${c.from}, ${c.to})` };
@@ -143,6 +146,7 @@ export default function DoneScreen({
         caption,
         showDate,
         filterId,
+        brandColor,
         poseRefs,
         poseCount,
         polaroids,
@@ -169,7 +173,7 @@ export default function DoneScreen({
   };
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col relative overflow-hidden">
+    <div className="flex-1 min-h-0 flex flex-col relative overflow-hidden animate-screen-in">
       <div className="flex-1 min-h-0 flex flex-col items-center relative overflow-hidden">
         {/* Confetti-ish decorations */}
         {[
@@ -233,6 +237,7 @@ export default function DoneScreen({
                   caption={caption}
                   showDate={showDate}
                   filterId={filterId}
+                  brandColor={brandColor}
                   poseRefs={poseRefs}
                   poseCount={poseCount}
                   scale={mode === 'pose-match'
@@ -245,7 +250,7 @@ export default function DoneScreen({
         </div>
 
         {downloadError && (
-          <p className="shrink-0 pb-1 text-xs font-bold text-booth-rose z-10">{downloadError}</p>
+          <p role="alert" className="shrink-0 pb-1 text-xs font-bold text-booth-rose z-10">{downloadError}</p>
         )}
 
         {/* Hidden SVG sticker source for the PNG export */}
@@ -267,7 +272,7 @@ export default function DoneScreen({
         <button
           onClick={handleDownload}
           className={[
-            'flex items-center gap-2 px-8 py-2.5 rounded-full font-black text-base transition-all duration-200',
+            'flex items-center gap-2 px-5 sm:px-8 py-2.5 rounded-full font-black text-sm sm:text-base transition-all duration-200',
             downloaded
               ? 'bg-booth-mint text-booth-text scale-95'
               : 'bg-booth-violet text-white hover:scale-105 hover:shadow-xl hover:shadow-booth-lavender/60',
@@ -286,14 +291,14 @@ export default function DoneScreen({
 
         <button
           onClick={onBack}
-          className="px-6 py-2.5 rounded-full border-2 border-booth-border text-booth-muted font-bold text-sm hover:border-booth-violet hover:text-booth-violet transition-all duration-150"
+          className="px-4 sm:px-6 py-2.5 rounded-full border-2 border-booth-border text-booth-muted font-bold text-sm hover:border-booth-violet hover:text-booth-violet transition-all duration-150"
         >
           Back to Editor
         </button>
 
         <button
           onClick={onStartOver}
-          className="flex items-center gap-2 px-6 py-2.5 rounded-full border-2 border-booth-border text-booth-muted font-bold text-sm hover:border-booth-rose hover:text-booth-rose transition-all duration-150"
+          className="flex items-center gap-2 px-4 sm:px-6 py-2.5 rounded-full border-2 border-booth-border text-booth-muted font-bold text-sm hover:border-booth-rose hover:text-booth-rose transition-all duration-150"
         >
           <RotateCcw size={16} strokeWidth={2} /> Start Over
         </button>

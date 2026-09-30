@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useState } from 'react';
 
 export interface ElementSize {
   width: number;
@@ -9,14 +9,22 @@ export interface ElementSize {
  * Measures an element's border-box size with a ResizeObserver.
  * Reads the observer's borderBoxSize (layout size), so CSS transforms
  * (e.g. scale-to-fit wrappers) never feed back into the measurement.
+ *
+ * The ref is a callback ref, so elements that mount later (popups,
+ * conditional panels) are measured as soon as they appear.
  */
 export default function useElementSize<T extends HTMLElement>() {
-  const ref = useRef<T | null>(null);
+  const [node, setNode] = useState<T | null>(null);
+  const ref = useCallback((el: T | null) => {
+    setNode(el);
+  }, []);
   const [size, setSize] = useState<ElementSize>({ width: 0, height: 0 });
 
   useLayoutEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    if (!node) {
+      setSize({ width: 0, height: 0 });
+      return;
+    }
 
     const apply = (width: number, height: number) =>
       setSize(prev =>
@@ -25,7 +33,7 @@ export default function useElementSize<T extends HTMLElement>() {
           : { width, height },
       );
     const update = () => {
-      const rect = el.getBoundingClientRect();
+      const rect = node.getBoundingClientRect();
       apply(rect.width, rect.height);
     };
 
@@ -36,9 +44,9 @@ export default function useElementSize<T extends HTMLElement>() {
       if (box) apply(box.inlineSize, box.blockSize);
       else update();
     });
-    ro.observe(el, { box: 'border-box' });
+    ro.observe(node, { box: 'border-box' });
     return () => ro.disconnect();
-  }, []);
+  }, [node]);
 
   return { ref, width: size.width, height: size.height };
 }

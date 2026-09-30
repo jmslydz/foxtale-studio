@@ -8,7 +8,7 @@ export default function StepHeader({ screen }: StepHeaderProps) {
   const current = SCREEN_STEPS[screen];
 
   return (
-    <header className="w-full h-16 shrink-0 bg-white border-b border-booth-border px-8 flex items-center justify-between select-none">
+    <header className="w-full min-h-16 shrink-0 bg-white border-b border-booth-border px-4 py-2 sm:px-8 flex items-center justify-between select-none">
       <div className="flex items-center gap-2 min-w-0">
         <img
           src={`${import.meta.env.BASE_URL}brand/fox-logo.png`}
@@ -21,7 +21,8 @@ export default function StepHeader({ screen }: StepHeaderProps) {
         </span>
       </div>
 
-      <div className="flex items-center gap-1 flex-wrap justify-end">
+      {/* Full stepper fits on tablets and up */}
+      <div className="hidden md:flex items-center gap-1 justify-end">
         {STEPS.map((label, i) => {
           const step = i + 1;
           const isPast = step < current;
@@ -69,7 +70,25 @@ export default function StepHeader({ screen }: StepHeaderProps) {
         })}
       </div>
 
-      <div className="w-32" />
+      {/* Compact progress on phones: 6 labeled steps can't fit side by side */}
+      <div className="md:hidden flex flex-col gap-1 w-full max-w-[200px]">
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-xs font-black text-booth-violet whitespace-nowrap">
+            Step {current} of {STEPS.length}
+          </span>
+          <span className="text-[10px] font-semibold text-booth-muted truncate">
+            {STEPS[current - 1]}
+          </span>
+        </div>
+        <div className="h-1.5 rounded-full bg-booth-border overflow-hidden">
+          <div
+            className="h-full rounded-full bg-booth-violet transition-all duration-300"
+            style={{ width: `${(current / STEPS.length) * 100}%` }}
+          />
+        </div>
+      </div>
+
+      <div className="hidden sm:block sm:w-32" />
     </header>
   );
 }

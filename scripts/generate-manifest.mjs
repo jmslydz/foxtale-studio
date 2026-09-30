@@ -21,6 +21,19 @@ function prettify(name) {
     .replace(/\b\w/g, c => c.toUpperCase());
 }
 
+/** True for hash-like file names (e.g. 32-hex Figma exports) that prettify() can't humanize. */
+function isHashName(name) {
+  return /^[0-9a-f]{16,}$/i.test(name) || /^[0-9a-f-]{36}$/i.test(name);
+}
+
+/** Numbered fallback labels per group, e.g. "Cat Sticker 01". Keeps ids stable. */
+const labelCounters = new Map();
+function friendlyLabel(base, group) {
+  if (!isHashName(base)) return prettify(base);
+  const n = (labelCounters.get(group) ?? 0) + 1;
+  labelCounters.set(group, n);
+  return `${group} ${String(n).padStart(2, '0')}`;
+}
 /** Slug a folder/file name for ids: lowercase, non-alnum -> '-'. */
 function slug(name) {
   return name
@@ -70,7 +83,7 @@ const stickers = stickerFiles.map(({ file, categoryDir }) => {
   const dot = base.lastIndexOf('.');
   return {
     id: slug(`${categoryDir}-${base.slice(0, dot)}`),
-    label: prettify(base.slice(0, dot)),
+    label: friendlyLabel(base.slice(0, dot), prettify(categoryDir)),
     category: prettify(categoryDir),
     src: publicPath(file),
   };
@@ -84,7 +97,7 @@ const backgrounds = walk(BACKGROUNDS_DIR, BACKGROUND_EXTENSIONS)
     const dot = base.lastIndexOf('.');
     return {
       id: slug(base.slice(0, dot)),
-      label: prettify(base.slice(0, dot)),
+      label: friendlyLabel(base.slice(0, dot), 'Background'),
       src: publicPath(file),
     };
   });
@@ -106,7 +119,7 @@ const poses = walk(POSES_DIR, BACKGROUND_EXTENSIONS)
     const dot = base.lastIndexOf('.');
     return {
       id: slug(`${categoryDir}-${base.slice(0, dot)}`),
-      label: prettify(base.slice(0, dot)),
+      label: friendlyLabel(base.slice(0, dot), prettify(categoryDir)),
       category: prettify(categoryDir),
       src: publicPath(file),
     };

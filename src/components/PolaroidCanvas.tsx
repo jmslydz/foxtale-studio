@@ -1,4 +1,5 @@
 import { type PlacedSticker, type PlacedPolaroid, type Shot, STICKER_SIZE_MIN, STICKER_SIZE_MAX } from '../types';
+import { resolvePublicSrc } from '../stickerCatalog';
 import useElementWidth from '../hooks/useElementWidth';
 import PolaroidCard from './PolaroidCard';
 import StickerGlyph from './stickers/StickerGlyph';
@@ -35,6 +36,8 @@ interface PolaroidCanvasProps {
   containerRef?: React.RefObject<HTMLDivElement | null>;
   /** Drag-to-bin: shown while a sticker or card is being dragged. */
   onStickerDragStateChange?: (dragging: boolean) => void;
+  /** Tap-a-photo-to-retake (review): fired with the card's SHOT index. */
+  onShotTap?: (shotIndex: number) => void;
 }
 
 const PASTELS = ['#FFD6E8', '#E8D5FF', '#C8F5E3', '#FFF3C4', '#C8E8FF', '#FFE5D0'];
@@ -63,6 +66,7 @@ export default function PolaroidCanvas({
   onCanvasClick,
   containerRef,
   onStickerDragStateChange,
+  onShotTap,
 }: PolaroidCanvasProps) {
   const canvasW = Math.round(height * (9 / 16));
   // Measured width of the rendered canvas (sticker sizePct -> px uses this).
@@ -72,7 +76,7 @@ export default function PolaroidCanvas({
     <div
       ref={el => {
         containerRef && (containerRef.current = el);
-        widthRef.current = el;
+        widthRef(el);
       }}
       data-testid="strip-canvas"
       onClick={onCanvasClick}
@@ -81,7 +85,7 @@ export default function PolaroidCanvas({
         height,
         background: bgColor || '#FFFFFF',
         backgroundImage: bgImage
-          ? `url(${import.meta.env.BASE_URL + bgImage})`
+          ? `url(${resolvePublicSrc(bgImage)})`
           : undefined,
         backgroundSize: bgImage ? 'cover' : undefined,
         backgroundPosition: bgImage ? 'center' : undefined,
@@ -106,14 +110,20 @@ export default function PolaroidCanvas({
               e.stopPropagation();
               onPolaroidPointerDown?.(e, p.id);
             }}
-            onClick={e => e.stopPropagation()}
+            onClick={e => {
+              e.stopPropagation();
+              if (onShotTap) onShotTap(p.shotIndex);
+            }}
+            role={onShotTap ? 'button' : undefined}
+            aria-label={onShotTap ? 'Retake this shot' : undefined}
+            title={onShotTap ? 'Tap to retake this shot' : undefined}
             style={{
               position: 'absolute',
               left: `${p.x}%`,
               top: `${p.y}%`,
               width: cardW,
               transform: `translate(-50%, -50%) rotate(${p.rotation}deg)`,
-              cursor: interactive ? 'grab' : 'default',
+              cursor: onShotTap ? 'pointer' : interactive ? 'grab' : 'default',
               userSelect: 'none',
               touchAction: 'none',
               borderRadius: 3,

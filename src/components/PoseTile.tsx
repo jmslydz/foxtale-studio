@@ -1,4 +1,5 @@
 import { type PoseRef } from '../types';
+import { resolvePublicSrc } from '../stickerCatalog';
 
 interface PoseTileProps {
   pose: PoseRef & { color?: string };
@@ -7,7 +8,7 @@ interface PoseTileProps {
   onClick: () => void;
 }
 
-/** Reference-photo tile: 4:3 object-cover, numbered badge + highlight when selected. */
+/** Reference-photo tile: 4:3, stretched to fill the frame edge to edge. */
 export default function PoseTile({ pose, order, onClick }: PoseTileProps) {
   const selected = order !== undefined;
   return (
@@ -24,12 +25,12 @@ export default function PoseTile({ pose, order, onClick }: PoseTileProps) {
     >
       {pose.src ? (
         <img
-          src={import.meta.env.BASE_URL + pose.src}
+          src={resolvePublicSrc(pose.src)}
           alt={pose.label}
           loading="lazy"
           decoding="async"
           draggable={false}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-fill"
         />
       ) : (
         <span

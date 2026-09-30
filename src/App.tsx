@@ -1,6 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { type Screen, type Mode, type Layout, type PlacedSticker, type PlacedPolaroid, type Shot, STICKER_SIZE_MIN, STICKER_SIZE_MAX, STICKER_SIZE_DEFAULT_GRAPHIC, STICKER_SIZE_DEFAULT_EMOJI } from './types';
 import { findStickerDef } from './stickerCatalog';
+import { resolveBrandColor, sampleImageLuminance } from './lib/brandColor';
 import { defaultPolaroids } from './lib/polaroidLayout';
 import StepHeader from './components/StepHeader';
 import HomeScreen from './screens/HomeScreen';
@@ -25,6 +26,8 @@ interface AppState {
   stickers: PlacedSticker[];
   caption: string;
   showDate: boolean;
+  /** Studio brand footer: 'auto' (contrast-picked) or an explicit hex. */
+  brandSetting: string;
   /** ONE filter for the whole session, applied at render time to user shots. */
   filterId: string;
   selectedStickerId: string | null;
@@ -46,6 +49,7 @@ const DEFAULT_STATE: AppState = {
   stickers: [],
   caption: '',
   showDate: true,
+  brandSetting: 'auto',
   filterId: 'original',
   selectedStickerId: null,
   polaroidCount: 1,
@@ -223,8 +227,27 @@ export default function App() {
     }));
   }, []);
 
-  const { screen, mode, layout, poseCount, selectedPoses, shots, retakeIndex, bgColor, bgImage, stickers, caption, showDate, filterId, selectedStickerId, polaroidCount, polaroids, selectedPolaroidId } =
+  const { screen, mode, layout, poseCount, selectedPoses, shots, retakeIndex, bgColor, bgImage, stickers, caption, showDate, brandSetting, filterId, selectedStickerId, polaroidCount, polaroids, selectedPolaroidId } =
     state;
+
+  // Background image brightness for auto brand color (sampled on change).
+  const [bgLuminance, setBgLuminance] = useState<number | null>(null);
+  useEffect(() => {
+    if (!bgImage) {
+      setBgLuminance(null);
+      return;
+    }
+    let live = true;
+    sampleImageLuminance(bgImage).then(l => {
+      if (live) setBgLuminance(l);
+    });
+    return () => {
+      live = false;
+    };
+  }, [bgImage]);
+
+  // Effective studio-brand footer color (preview + export share it).
+  const brandColor = resolveBrandColor(brandSetting, bgColor, bgLuminance);
 
   return (
     <div
@@ -269,8 +292,6 @@ export default function App() {
               })
             }
             onSetPolaroidCount={setPolaroidCount}
-            onSetBgColor={c => setState(prev => ({ ...prev, bgColor: c, bgImage: null }))}
-            onSetBgImage={src => setState(prev => ({ ...prev, bgImage: src }))}
             onBack={goHome}
             onContinue={goCapture}
           />
@@ -332,6 +353,9 @@ export default function App() {
             onSelectSticker={id => set('selectedStickerId', id)}
             onSetCaption={t => set('caption', t)}
             onSetShowDate={v => set('showDate', v)}
+            brandSetting={brandSetting}
+            onSetBrandSetting={v => set('brandSetting', v)}
+            brandColor={brandColor}
             filterId={filterId}
             onSetFilterId={id => set('filterId', id)}
             onSelectPolaroid={selectPolaroid}
@@ -356,6 +380,7 @@ export default function App() {
             caption={caption}
             showDate={showDate}
             filterId={filterId}
+            brandColor={brandColor}
             polaroids={polaroids}
             onBack={goEditor}
             onStartOver={goHome}

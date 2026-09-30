@@ -1,4 +1,4 @@
-import { findStickerDef } from '../../stickerCatalog';
+import { findStickerDef, resolvePublicSrc } from '../../stickerCatalog';
 import { type StickerDef } from '../../types';
 
 /** Find a sticker definition by its id across all categories. */
@@ -27,7 +27,7 @@ export default function StickerGlyph({ id, size, emojiFontSize }: StickerGlyphPr
   if (def.src) {
     return (
       <img
-        src={import.meta.env.BASE_URL + def.src}
+        src={resolvePublicSrc(def.src)}
         alt={def.label}
         draggable={false}
         style={{

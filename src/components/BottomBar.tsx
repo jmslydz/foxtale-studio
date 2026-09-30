@@ -14,8 +14,8 @@ export default function BottomBar({ children, className = '' }: BottomBarProps) 
   return (
     <div
       className={[
-        'shrink-0 sticky bottom-0 z-30 w-full flex items-center justify-center gap-4',
-        'px-6 py-3 bg-booth-bg/95 backdrop-blur-sm border-t border-booth-border',
+        'shrink-0 sticky bottom-0 z-30 w-full flex items-center justify-center gap-3 sm:gap-4 flex-wrap',
+        'px-4 sm:px-6 py-3 bg-booth-bg/95 backdrop-blur-sm border-t border-booth-border',
         className,
       ].join(' ')}
     >
