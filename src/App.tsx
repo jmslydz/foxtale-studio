@@ -4,6 +4,7 @@ import { findStickerDef } from './stickerCatalog';
 import { resolveBrandColor, sampleImageLuminance } from './lib/brandColor';
 import { defaultPolaroids } from './lib/polaroidLayout';
 import StepHeader from './components/StepHeader';
+import LockScreen from './screens/LockScreen';
 import HomeScreen from './screens/HomeScreen';
 import SetupScreen from './screens/SetupScreen';
 import CaptureScreen from './screens/CaptureScreen';
@@ -59,6 +60,8 @@ const DEFAULT_STATE: AppState = {
 
 export default function App() {
   const [state, setState] = useState<AppState>(DEFAULT_STATE);
+  // Love-gate: every fresh load asks for Kelan's birthday first.
+  const [unlocked, setUnlocked] = useState(false);
 
   const set = useCallback(<K extends keyof AppState>(key: K, value: AppState[K]) => {
     setState(prev => ({ ...prev, [key]: value }));
@@ -248,6 +251,10 @@ export default function App() {
 
   // Effective studio-brand footer color (preview + export share it).
   const brandColor = resolveBrandColor(brandSetting, bgColor, bgLuminance);
+
+  if (!unlocked) {
+    return <LockScreen onUnlock={() => setUnlocked(true)} />;
+  }
 
   return (
     <div

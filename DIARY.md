@@ -254,3 +254,8 @@ Checked all 62 files in `src/`: `tsc` clean, `vite build` clean. Found 8 things 
 - Pushed everything to `jmslydz/foxtale-studio` on main.
 - Live site via GitHub Pages + Actions (`.github/workflows/deploy-pages.yml`, base `/foxtale-studio/`): https://jmslydz.github.io/foxtale-studio/
 - Bonus: the live link is HTTPS, so her phone camera works there (the LAN http:// link is insecure, which blocks cameras).
+
+## 2026-09-30 - Birthday love-gate (your idea)
+
+- New src/screens/LockScreen.tsx, wired in App.tsx: every fresh load asks ARE U MYY BABBYYY with typewriter text, wiggling fox, floating hearts, masked DD/MM/YY input (accepts 100606, slashes optional), shake + rotating miss messages, hearts-burst success then unlock.
+- New drift/wiggle/shake keyframes in index.css (reduced-motion safe). Verified: lock, miss, open, unlock.
