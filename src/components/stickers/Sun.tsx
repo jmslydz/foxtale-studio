@@ -1,4 +1,4 @@
-import { STICKER_COLORS as C, OUTLINE } from './colors';
+import { STICKER_COLORS as C, OUTLINE } from "./colors"
 
 /** Smiling-free flat sun: rounded core with soft rounded rays. */
 export default function Sun({ size }: { size: number }) {
@@ -26,7 +26,15 @@ export default function Sun({ size }: { size: number }) {
           transform={`rotate(${ray.r} ${ray.x} ${ray.y})`}
         />
       ))}
-      <circle cx="24" cy="24" r="11" fill={C.yellow} stroke={C.yellowDeep} strokeWidth={1.5} {...OUTLINE} />
+      <circle
+        cx="24"
+        cy="24"
+        r="11"
+        fill={C.yellow}
+        stroke={C.yellowDeep}
+        strokeWidth={1.5}
+        {...OUTLINE}
+      />
       <circle cx="20.5" cy="22" r="1.6" fill={C.peachDeep} />
       <circle cx="27.5" cy="22" r="1.6" fill={C.peachDeep} />
       <path
@@ -36,5 +44,5 @@ export default function Sun({ size }: { size: number }) {
         {...OUTLINE}
       />
     </svg>
-  );
+  )
 }

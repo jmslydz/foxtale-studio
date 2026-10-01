@@ -1,4 +1,4 @@
-import { STICKER_COLORS as C, OUTLINE } from './colors';
+import { STICKER_COLORS as C, OUTLINE } from "./colors"
 
 /** Dotted curved arrow ending in a soft rounded head. */
 export default function DottedArrow({ size }: { size: number }) {
@@ -24,5 +24,5 @@ export default function DottedArrow({ size }: { size: number }) {
       {/* start dot */}
       <circle cx="6" cy="38" r="2.4" fill={C.pinkDeep} />
     </svg>
-  );
+  )
 }

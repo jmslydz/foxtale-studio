@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useState } from 'react';
+import { useCallback, useLayoutEffect, useState } from "react"
 
 /**
  * Measures an element's width with a ResizeObserver so percentage-based
@@ -8,23 +8,23 @@ import { useCallback, useLayoutEffect, useState } from 'react';
  * conditional panels) are measured as soon as they appear.
  */
 export default function useElementWidth<T extends HTMLElement>() {
-  const [node, setNode] = useState<T | null>(null);
+  const [node, setNode] = useState<T | null>(null)
   const ref = useCallback((el: T | null) => {
-    setNode(el);
-  }, []);
-  const [width, setWidth] = useState(0);
+    setNode(el)
+  }, [])
+  const [width, setWidth] = useState(0)
 
   useLayoutEffect(() => {
     if (!node) {
-      setWidth(0);
-      return;
+      setWidth(0)
+      return
     }
-    const update = () => setWidth(node.getBoundingClientRect().width);
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(node);
-    return () => ro.disconnect();
-  }, [node]);
+    const update = () => setWidth(node.getBoundingClientRect().width)
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(node)
+    return () => ro.disconnect()
+  }, [node])
 
-  return { ref, width };
+  return { ref, width }
 }

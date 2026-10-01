@@ -1,8 +1,8 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react"
 
 interface BottomBarProps {
-  children: ReactNode;
-  className?: string;
+  children: ReactNode
+  className?: string
 }
 
 /**
@@ -10,16 +10,20 @@ interface BottomBarProps {
  * shrink-0 tail of every screen on desktop; sticky to the viewport bottom on
  * small screens so the buttons are never below the fold.
  */
-export default function BottomBar({ children, className = '' }: BottomBarProps) {
+export default function BottomBar({
+  children,
+  className = "",
+}: BottomBarProps) {
   return (
     <div
       className={[
-        'shrink-0 sticky bottom-0 z-30 w-full flex items-center justify-center gap-3 sm:gap-4 flex-wrap',
-        'px-4 sm:px-6 py-3 bg-booth-bg/95 backdrop-blur-sm border-t border-booth-border',
+        "shrink-0 sticky bottom-0 z-30 w-full flex items-center justify-center gap-3 sm:gap-4 flex-wrap",
+        "px-4 sm:px-6 py-3 bg-booth-bg/95 backdrop-blur-sm border-t border-booth-border",
         className,
-      ].join(' ')}
+      ].join(" ")}
+      style={{ paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))" }}
     >
       {children}
     </div>
-  );
+  )
 }

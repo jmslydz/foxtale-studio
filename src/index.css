@@ -4,20 +4,26 @@
 @theme {
   --color-booth-bg: #FFF9F5;
   --color-booth-pink: #FFD6E8;
-  --color-booth-lavender: #FFE4CF;
+  --color-booth-lavender: #EEE6F3;
   --color-booth-mint: #C8F5E3;
   --color-booth-yellow: #FFF3C4;
   --color-booth-sky: #C8E8FF;
   --color-booth-rose: #FFB3C8;
-  --color-booth-violet: #FF8A3D;
+  --color-booth-primary: #A94E28;
+  --color-booth-primary-hover: #873D20;
+  /* Legacy utility alias; new styles should use the semantic primary token. */
+  --color-booth-violet: var(--color-booth-primary);
   --color-booth-sage: #9EDFC4;
   --color-booth-butter: #FFE87A;
   --color-booth-azure: #93CCFF;
   --color-booth-peach: #FFE5D0;
   --color-booth-text: #3A2A3A;
-  --color-booth-muted: #9A8A9A;
-  --color-booth-border: #EDE0ED;
+  --color-booth-muted: #766C76;
+  --color-booth-border: #E8DEE6;
   --color-booth-card: #FFFFFF;
+  --color-booth-success: #2E7455;
+  --color-booth-warning: #8B5C00;
+  --color-booth-danger: #B33E52;
   --font-sans: 'Nunito', system-ui, sans-serif;
 }
 
@@ -29,15 +35,27 @@ body {
   background-color: #FFF9F5;
   color: #3A2A3A;
   min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+:where(button, a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid #A94E28 !important;
+  outline-offset: 3px;
+}
+
+button:not(:disabled) {
+  cursor: pointer;
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #EDE0ED; border-radius: 99px; }
-::-webkit-scrollbar-thumb:hover { background: #FF8A3D; }
+::-webkit-scrollbar-thumb { background: #D8CCD7; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #A94E28; }
 
 /* Utility: hide the scrollbar while keeping the content scrollable. */
 .no-scrollbar {
@@ -103,5 +121,12 @@ body {
   .animate-wiggle,
   .animate-shake {
     animation: none;
+  }
+
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

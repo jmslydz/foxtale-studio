@@ -1,4 +1,4 @@
-import { STICKER_COLORS as C, OUTLINE } from './colors';
+import { STICKER_COLORS as C, OUTLINE } from "./colors"
 
 /** Small sparkle cluster: one big four-point sparkle with two little ones. */
 export default function SparkleCluster({ size }: { size: number }) {
@@ -29,5 +29,5 @@ export default function SparkleCluster({ size }: { size: number }) {
         {...OUTLINE}
       />
     </svg>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import { STICKER_COLORS as C, OUTLINE } from './colors';
+import { STICKER_COLORS as C, OUTLINE } from "./colors"
 
 /** Five-point star with soft rounded points and a lighter outline. */
 export default function Star5({ size }: { size: number }) {
@@ -12,5 +12,5 @@ export default function Star5({ size }: { size: number }) {
         {...OUTLINE}
       />
     </svg>
-  );
+  )
 }

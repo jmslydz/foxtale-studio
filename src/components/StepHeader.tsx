@@ -1,11 +1,11 @@
-import { STEPS, SCREEN_STEPS, type Screen } from '../types';
+import { STEPS, SCREEN_STEPS, type Screen } from "../types"
 
 interface StepHeaderProps {
-  screen: Screen;
+  screen: Screen
 }
 
 export default function StepHeader({ screen }: StepHeaderProps) {
-  const current = SCREEN_STEPS[screen];
+  const current = SCREEN_STEPS[screen]
 
   return (
     <header className="w-full min-h-16 shrink-0 bg-white border-b border-booth-border px-4 py-2 sm:px-8 flex items-center justify-between select-none">
@@ -22,37 +22,53 @@ export default function StepHeader({ screen }: StepHeaderProps) {
       </div>
 
       {/* Full stepper fits on tablets and up */}
-      <div className="hidden md:flex items-center gap-1 justify-end">
+      <div
+        className="hidden lg:flex items-center gap-1 justify-end"
+        role="list"
+        aria-label="Workflow progress"
+      >
         {STEPS.map((label, i) => {
-          const step = i + 1;
-          const isPast = step < current;
-          const isCurrent = step === current;
-          const isFuture = step > current;
+          const step = i + 1
+          const isPast = step < current
+          const isCurrent = step === current
+          const isFuture = step > current
 
           return (
-            <div key={label} className="flex items-center gap-1">
+            <div
+              key={label}
+              className="flex items-center gap-1"
+              role="listitem"
+              aria-current={isCurrent ? "step" : undefined}
+              aria-label={`Step ${step}: ${label}${
+                isPast
+                  ? ", complete"
+                  : isCurrent
+                    ? ", current step"
+                    : ", upcoming"
+              }`}
+            >
               <div className="flex flex-col items-center gap-1">
                 <div
                   className={[
-                    'w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-200',
+                    "w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-200",
                     isCurrent
-                      ? 'bg-booth-violet text-white shadow-sm'
+                      ? "bg-booth-violet text-white shadow-sm"
                       : isPast
-                      ? 'bg-booth-mint text-booth-text'
-                      : 'bg-booth-border text-booth-muted',
-                  ].join(' ')}
+                        ? "bg-booth-mint text-booth-text"
+                        : "bg-booth-border text-booth-muted",
+                  ].join(" ")}
                 >
-                  {isPast ? '✓' : step}
+                  {isPast ? "✓" : step}
                 </div>
                 <span
                   className={[
-                    'text-[10px] font-semibold whitespace-nowrap',
+                    "text-[11px] font-semibold whitespace-nowrap",
                     isCurrent
-                      ? 'text-booth-violet'
+                      ? "text-booth-violet"
                       : isPast
-                      ? 'text-booth-sage'
-                      : 'text-booth-muted',
-                  ].join(' ')}
+                        ? "text-booth-success"
+                        : "text-booth-muted",
+                  ].join(" ")}
                 >
                   {label}
                 </span>
@@ -60,27 +76,35 @@ export default function StepHeader({ screen }: StepHeaderProps) {
               {i < STEPS.length - 1 && (
                 <div
                   className={[
-                    'w-8 h-[2px] mb-4 rounded-full transition-all duration-200',
-                    isPast ? 'bg-booth-sage' : 'bg-booth-border',
-                  ].join(' ')}
+                    "w-8 h-[2px] mb-4 rounded-full transition-all duration-200",
+                    isPast ? "bg-booth-sage" : "bg-booth-border",
+                  ].join(" ")}
                 />
               )}
             </div>
-          );
+          )
         })}
       </div>
 
       {/* Compact progress on phones: 6 labeled steps can't fit side by side */}
-      <div className="md:hidden flex flex-col gap-1 w-full max-w-[200px]">
+      <div className="lg:hidden flex flex-col gap-1 w-full max-w-[200px]">
         <div className="flex items-center justify-between gap-2">
           <span className="text-xs font-black text-booth-violet whitespace-nowrap">
             Step {current} of {STEPS.length}
           </span>
-          <span className="text-[10px] font-semibold text-booth-muted truncate">
+          <span className="text-xs font-semibold text-booth-muted truncate">
             {STEPS[current - 1]}
           </span>
         </div>
-        <div className="h-1.5 rounded-full bg-booth-border overflow-hidden">
+        <div
+          className="h-1.5 rounded-full bg-booth-border overflow-hidden"
+          role="progressbar"
+          aria-label="Workflow progress"
+          aria-valuemin={1}
+          aria-valuemax={STEPS.length}
+          aria-valuenow={current}
+          aria-valuetext={`Step ${current} of ${STEPS.length}: ${STEPS[current - 1]}`}
+        >
           <div
             className="h-full rounded-full bg-booth-violet transition-all duration-300"
             style={{ width: `${(current / STEPS.length) * 100}%` }}
@@ -90,5 +114,5 @@ export default function StepHeader({ screen }: StepHeaderProps) {
 
       <div className="hidden sm:block sm:w-32" />
     </header>
-  );
+  )
 }

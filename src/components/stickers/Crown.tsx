@@ -1,4 +1,4 @@
-import { STICKER_COLORS as C, OUTLINE } from './colors';
+import { STICKER_COLORS as C, OUTLINE } from "./colors"
 
 /** Chunky pastel crown with rounded points and gem dots. */
 export default function Crown({ size }: { size: number }) {
@@ -16,5 +16,5 @@ export default function Crown({ size }: { size: number }) {
       <circle cx="24" cy="29" r="2" fill={C.lavenderDeep} />
       <circle cx="32" cy="29" r="2" fill={C.mintDeep} />
     </svg>
-  );
+  )
 }

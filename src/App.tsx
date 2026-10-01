@@ -1,135 +1,162 @@
-import { useState, useCallback, useEffect } from 'react';
-import { type Screen, type Mode, type Layout, type PlacedSticker, type PlacedPolaroid, type Shot, STICKER_SIZE_MIN, STICKER_SIZE_MAX, STICKER_SIZE_DEFAULT_GRAPHIC, STICKER_SIZE_DEFAULT_EMOJI } from './types';
-import { findStickerDef } from './stickerCatalog';
-import { resolveBrandColor, sampleImageLuminance } from './lib/brandColor';
-import { defaultPolaroids } from './lib/polaroidLayout';
-import StepHeader from './components/StepHeader';
-import LockScreen from './screens/LockScreen';
-import HomeScreen from './screens/HomeScreen';
-import SetupScreen from './screens/SetupScreen';
-import CaptureScreen from './screens/CaptureScreen';
-import ReviewScreen from './screens/ReviewScreen';
-import EditorScreen from './screens/EditorScreen';
-import DoneScreen from './screens/DoneScreen';
+import { useState, useCallback, useEffect } from "react"
+import {
+  type Screen,
+  type Mode,
+  type Layout,
+  type PlacedSticker,
+  type PlacedPolaroid,
+  type Shot,
+  STICKER_SIZE_MIN,
+  STICKER_SIZE_MAX,
+  STICKER_SIZE_DEFAULT_GRAPHIC,
+  STICKER_SIZE_DEFAULT_EMOJI,
+} from "./types"
+import { findStickerDef } from "./stickerCatalog"
+import { resolveBrandColor, sampleImageLuminance } from "./lib/brandColor"
+import { defaultPolaroids } from "./lib/polaroidLayout"
+import StepHeader from "./components/StepHeader"
+import LockScreen from "./screens/LockScreen"
+import HomeScreen from "./screens/HomeScreen"
+import SetupScreen from "./screens/SetupScreen"
+import CaptureScreen from "./screens/CaptureScreen"
+import ReviewScreen from "./screens/ReviewScreen"
+import EditorScreen from "./screens/EditorScreen"
+import DoneScreen from "./screens/DoneScreen"
 
 interface AppState {
-  screen: Screen;
-  mode: Mode;
-  layout: Layout;
+  screen: Screen
+  mode: Mode
+  layout: Layout
   /** pose-match: how many reference poses to copy (also the shot count). */
-  poseCount: 1 | 2 | 3 | 4;
+  poseCount: 1 | 2 | 3 | 4
   /** pose-match: manifest pose ids in the order picked. */
-  selectedPoses: string[];
-  shots: Shot[];
-  retakeIndex: number | null;
-  bgColor: string;
-  bgImage: string | null;
-  stickers: PlacedSticker[];
-  caption: string;
-  showDate: boolean;
+  selectedPoses: string[]
+  shots: Shot[]
+  retakeIndex: number | null
+  bgColor: string
+  bgImage: string | null
+  stickers: PlacedSticker[]
+  caption: string
+  showDate: boolean
   /** Studio brand footer: 'auto' (contrast-picked) or an explicit hex. */
-  brandSetting: string;
+  brandSetting: string
   /** ONE filter for the whole session, applied at render time to user shots. */
-  filterId: string;
-  selectedStickerId: string | null;
-  polaroidCount: 1 | 2 | 3;
-  polaroids: PlacedPolaroid[];
-  selectedPolaroidId: string | null;
+  filterId: string
+  selectedStickerId: string | null
+  polaroidCount: 1 | 2 | 3
+  polaroids: PlacedPolaroid[]
+  selectedPolaroidId: string | null
 }
 
 const DEFAULT_STATE: AppState = {
-  screen: 'home',
-  mode: 'classic',
-  layout: '4-portrait',
+  screen: "home",
+  mode: "classic",
+  layout: "4-portrait",
   poseCount: 4,
   selectedPoses: [],
   shots: [],
   retakeIndex: null,
-  bgColor: '#FFFFFF',
+  bgColor: "#FFFFFF",
   bgImage: null,
   stickers: [],
-  caption: '',
+  caption: "",
   showDate: true,
-  brandSetting: 'auto',
-  filterId: 'original',
+  brandSetting: "auto",
+  filterId: "original",
   selectedStickerId: null,
   polaroidCount: 1,
   polaroids: [],
   selectedPolaroidId: null,
-};
+}
 
 export default function App() {
-  const [state, setState] = useState<AppState>(DEFAULT_STATE);
+  const [state, setState] = useState<AppState>(DEFAULT_STATE)
   // Love-gate: every fresh load asks for Kelan's birthday first.
-  const [unlocked, setUnlocked] = useState(false);
+  const [unlocked, setUnlocked] = useState(false)
 
-  const set = useCallback(<K extends keyof AppState>(key: K, value: AppState[K]) => {
-    setState(prev => ({ ...prev, [key]: value }));
-  }, []);
+  const set = useCallback(
+    <K extends keyof AppState>(key: K, value: AppState[K]) => {
+      setState((prev) => ({ ...prev, [key]: value }))
+    },
+    [],
+  )
 
   // Navigation
   const goHome = () => {
     // Revoke from the current snapshot, outside the updater: updaters can run
     // twice under React StrictMode, which would double-fire the revokes.
-    state.shots.forEach(shot => URL.revokeObjectURL(shot.url));
-    setState({ ...DEFAULT_STATE, shots: [] });
-  };
+    state.shots.forEach((shot) => URL.revokeObjectURL(shot.url))
+    setState({ ...DEFAULT_STATE, shots: [] })
+  }
   const goSetup = (mode: Mode) =>
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
-      screen: 'setup',
+      screen: "setup",
       mode,
       // Entering polaroid mode seeds the default card placements.
-      polaroids: mode === 'polaroid' ? defaultPolaroids(prev.polaroidCount) : prev.polaroids,
+      polaroids:
+        mode === "polaroid"
+          ? defaultPolaroids(prev.polaroidCount)
+          : prev.polaroids,
       selectedPolaroidId: null,
-    }));
-  const goCapture = () => setState(prev => ({ ...prev, screen: 'capture', shots: [], retakeIndex: null }));
-  const goCaptureRetake = (i: number) => setState(prev => ({ ...prev, screen: 'capture', retakeIndex: i }));
-  const goReview = () => set('screen', 'review');
-  const goEditor = () => set('screen', 'editor');
-  const goDone = () => set('screen', 'done');
+    }))
+  const goCapture = () =>
+    setState((prev) => ({
+      ...prev,
+      screen: "capture",
+      shots: [],
+      retakeIndex: null,
+    }))
+  const goCaptureRetake = (i: number) =>
+    setState((prev) => ({ ...prev, screen: "capture", retakeIndex: i }))
+  const goReview = () => set("screen", "review")
+  const goEditor = () => set("screen", "editor")
+  const goDone = () => set("screen", "done")
 
   // Shots
   const addShot = useCallback(
     (blob: Blob) => {
       // Created/revoked outside the updater: state updaters can run twice
       // under React StrictMode, which would double these side effects.
-      const url = URL.createObjectURL(blob);
+      const url = URL.createObjectURL(blob)
       const replacedUrl =
-        state.retakeIndex !== null ? state.shots[state.retakeIndex]?.url : undefined;
-      if (replacedUrl) URL.revokeObjectURL(replacedUrl);
+        state.retakeIndex !== null
+          ? state.shots[state.retakeIndex]?.url
+          : undefined
+      if (replacedUrl) URL.revokeObjectURL(replacedUrl)
 
-      setState(prev => {
+      setState((prev) => {
         const shot: Shot = {
           id: `shot-${Date.now()}-${Math.random().toString(36).slice(2)}`,
           blob,
           url,
-        };
-        if (prev.retakeIndex !== null) {
-          const shots = [...prev.shots];
-          shots[prev.retakeIndex] = shot;
-          return { ...prev, shots, retakeIndex: null };
         }
-        return { ...prev, shots: [...prev.shots, shot] };
-      });
+        if (prev.retakeIndex !== null) {
+          const shots = [...prev.shots]
+          shots[prev.retakeIndex] = shot
+          return { ...prev, shots, retakeIndex: null }
+        }
+        return { ...prev, shots: [...prev.shots, shot] }
+      })
     },
     [state.retakeIndex, state.shots],
-  );
+  )
 
   // After all shots captured (from CaptureScreen)
   const onCaptureDone = useCallback(() => {
-    goReview();
-  }, []);
+    goReview()
+  }, [])
 
   // Stickers
   const addSticker = useCallback((stickerId: string) => {
     // Image/SVG glyphs start larger than emoji, as % of canvas width.
-    const def = findStickerDef(stickerId);
-    const sizePct = def?.src || def?.Svg
-      ? STICKER_SIZE_DEFAULT_GRAPHIC
-      : STICKER_SIZE_DEFAULT_EMOJI;
-    setState(prev => {
-      const id = `sticker-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const def = findStickerDef(stickerId)
+    const sizePct =
+      def?.src || def?.Svg
+        ? STICKER_SIZE_DEFAULT_GRAPHIC
+        : STICKER_SIZE_DEFAULT_EMOJI
+    setState((prev) => {
+      const id = `sticker-${Date.now()}-${Math.random().toString(36).slice(2)}`
       const newSticker: PlacedSticker = {
         id,
         stickerId,
@@ -137,136 +164,171 @@ export default function App() {
         y: 20 + Math.random() * 60,
         sizePct,
         rotation: Math.round((Math.random() - 0.5) * 30),
-      };
-      return { ...prev, stickers: [...prev.stickers, newSticker], selectedStickerId: id };
-    });
-  }, []);
+      }
+      return {
+        ...prev,
+        stickers: [...prev.stickers, newSticker],
+        selectedStickerId: id,
+      }
+    })
+  }, [])
 
   const moveSticker = useCallback((id: string, x: number, y: number) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
-      stickers: prev.stickers.map(s => (s.id === id ? { ...s, x, y } : s)),
-    }));
-  }, []);
+      stickers: prev.stickers.map((s) => (s.id === id ? { ...s, x, y } : s)),
+    }))
+  }, [])
 
   const deleteSticker = useCallback((id: string) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
-      stickers: prev.stickers.filter(s => s.id !== id),
-      selectedStickerId: prev.selectedStickerId === id ? null : prev.selectedStickerId,
-    }));
-  }, []);
+      stickers: prev.stickers.filter((s) => s.id !== id),
+      selectedStickerId:
+        prev.selectedStickerId === id ? null : prev.selectedStickerId,
+    }))
+  }, [])
 
   const resizeStickerPx = useCallback((id: string, sizePct: number) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
-      stickers: prev.stickers.map(s =>
-        s.id === id ? { ...s, sizePct: Math.max(STICKER_SIZE_MIN, Math.min(STICKER_SIZE_MAX, sizePct)) } : s,
+      stickers: prev.stickers.map((s) =>
+        s.id === id
+          ? {
+              ...s,
+              sizePct: Math.max(
+                STICKER_SIZE_MIN,
+                Math.min(STICKER_SIZE_MAX, sizePct),
+              ),
+            }
+          : s,
       ),
-    }));
-  }, []);
+    }))
+  }, [])
 
   /** Absolute rotation (deg) from the SelectionBox rotate handle. */
   const rotateStickerAbs = useCallback((id: string, rotation: number) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
-      stickers: prev.stickers.map(s => (s.id === id ? { ...s, rotation } : s)),
-    }));
-  }, []);
+      stickers: prev.stickers.map((s) =>
+        s.id === id ? { ...s, rotation } : s,
+      ),
+    }))
+  }, [])
 
   // Polaroid cards
   const setPolaroidCount = useCallback((count: 1 | 2 | 3) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       polaroidCount: count,
       polaroids: defaultPolaroids(count),
       selectedPolaroidId: null,
-    }));
-  }, []);
+    }))
+  }, [])
 
   const resetPolaroids = useCallback(() => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       polaroids: defaultPolaroids(prev.polaroidCount),
       selectedPolaroidId: null,
-    }));
-  }, []);
+    }))
+  }, [])
 
   const selectPolaroid = useCallback((id: string | null) => {
-    setState(prev => {
-      if (id === null) return { ...prev, selectedPolaroidId: null };
+    setState((prev) => {
+      if (id === null) return { ...prev, selectedPolaroidId: null }
       // Selecting a card brings it to the top of the card order.
-      const card = prev.polaroids.find(p => p.id === id);
-      if (!card) return { ...prev, selectedPolaroidId: id };
+      const card = prev.polaroids.find((p) => p.id === id)
+      if (!card) return { ...prev, selectedPolaroidId: id }
       return {
         ...prev,
         selectedPolaroidId: id,
-        polaroids: [...prev.polaroids.filter(p => p.id !== id), card],
-      };
-    });
-  }, []);
+        polaroids: [...prev.polaroids.filter((p) => p.id !== id), card],
+      }
+    })
+  }, [])
 
   const movePolaroid = useCallback((id: string, x: number, y: number) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
-      polaroids: prev.polaroids.map(p => (p.id === id ? { ...p, x, y } : p)),
-    }));
-  }, []);
+      polaroids: prev.polaroids.map((p) => (p.id === id ? { ...p, x, y } : p)),
+    }))
+  }, [])
 
   const resizePolaroid = useCallback((id: string, width: number) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
-      polaroids: prev.polaroids.map(p =>
+      polaroids: prev.polaroids.map((p) =>
         p.id === id ? { ...p, width: Math.max(25, Math.min(90, width)) } : p,
       ),
-    }));
-  }, []);
+    }))
+  }, [])
 
   /** Absolute rotation (deg) for cards from the SelectionBox rotate handle. */
   const rotatePolaroidAbs = useCallback((id: string, rotation: number) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
-      polaroids: prev.polaroids.map(p => (p.id === id ? { ...p, rotation } : p)),
-    }));
-  }, []);
+      polaroids: prev.polaroids.map((p) =>
+        p.id === id ? { ...p, rotation } : p,
+      ),
+    }))
+  }, [])
 
-  const { screen, mode, layout, poseCount, selectedPoses, shots, retakeIndex, bgColor, bgImage, stickers, caption, showDate, brandSetting, filterId, selectedStickerId, polaroidCount, polaroids, selectedPolaroidId } =
-    state;
+  const {
+    screen,
+    mode,
+    layout,
+    poseCount,
+    selectedPoses,
+    shots,
+    retakeIndex,
+    bgColor,
+    bgImage,
+    stickers,
+    caption,
+    showDate,
+    brandSetting,
+    filterId,
+    selectedStickerId,
+    polaroidCount,
+    polaroids,
+    selectedPolaroidId,
+  } = state
 
   // Background image brightness for auto brand color (sampled on change).
-  const [bgLuminance, setBgLuminance] = useState<number | null>(null);
+  const [bgLuminance, setBgLuminance] = useState<number | null>(null)
   useEffect(() => {
     if (!bgImage) {
-      setBgLuminance(null);
-      return;
+      setBgLuminance(null)
+      return
     }
-    let live = true;
-    sampleImageLuminance(bgImage).then(l => {
-      if (live) setBgLuminance(l);
-    });
+    let live = true
+    sampleImageLuminance(bgImage).then((l) => {
+      if (live) setBgLuminance(l)
+    })
     return () => {
-      live = false;
-    };
-  }, [bgImage]);
+      live = false
+    }
+  }, [bgImage])
 
   // Effective studio-brand footer color (preview + export share it).
-  const brandColor = resolveBrandColor(brandSetting, bgColor, bgLuminance);
+  const brandColor = resolveBrandColor(brandSetting, bgColor, bgLuminance)
 
   if (!unlocked) {
-    return <LockScreen onUnlock={() => setUnlocked(true)} />;
+    return <LockScreen onUnlock={() => setUnlocked(true)} />
   }
 
   return (
     <div
-      className="min-h-dvh lg:h-dvh flex flex-col lg:overflow-hidden"
-      style={{ background: '#FFF9F5' }}
+      className="min-h-dvh xl:h-dvh flex flex-col xl:overflow-hidden"
+      style={{ background: "#FFF9F5" }}
     >
       <StepHeader screen={screen} />
 
       <main className="flex-1 min-h-0 flex flex-col">
-        {screen === 'home' && <HomeScreen onSelect={goSetup} />}
+        {screen === "home" && <HomeScreen onSelect={goSetup} />}
 
-        {screen === 'setup' && (
+        {screen === "setup" && (
           <SetupScreen
             mode={mode}
             layout={layout}
@@ -277,9 +339,9 @@ export default function App() {
             bgColor={bgColor}
             bgImage={bgImage}
             shots={shots}
-            onSetLayout={l => set('layout', l)}
-            onSetPoseCount={count =>
-              setState(prev => ({
+            onSetLayout={(l) => set("layout", l)}
+            onSetPoseCount={(count) =>
+              setState((prev) => ({
                 ...prev,
                 poseCount: count,
                 // Lowering the count drops extra selections from the end.
@@ -287,15 +349,15 @@ export default function App() {
               }))
             }
             onTogglePose={(id, max) =>
-              setState(prev => {
-                const has = prev.selectedPoses.includes(id);
+              setState((prev) => {
+                const has = prev.selectedPoses.includes(id)
                 let next = has
-                  ? prev.selectedPoses.filter(p => p !== id)
+                  ? prev.selectedPoses.filter((p) => p !== id)
                   : prev.selectedPoses.length < max
-                  ? [...prev.selectedPoses, id]
-                  : prev.selectedPoses;
-                next = next.slice(0, max);
-                return { ...prev, selectedPoses: next };
+                    ? [...prev.selectedPoses, id]
+                    : prev.selectedPoses
+                next = next.slice(0, max)
+                return { ...prev, selectedPoses: next }
               })
             }
             onSetPolaroidCount={setPolaroidCount}
@@ -304,7 +366,7 @@ export default function App() {
           />
         )}
 
-        {screen === 'capture' && (
+        {screen === "capture" && (
           <CaptureScreen
             mode={mode}
             layout={layout}
@@ -314,14 +376,16 @@ export default function App() {
             shots={shots}
             retakeIndex={retakeIndex}
             filterId={filterId}
-            onSetFilterId={id => set('filterId', id)}
+            onSetFilterId={(id) => set("filterId", id)}
             onAddShot={addShot}
-            onBack={() => set('screen', retakeIndex !== null ? 'review' : 'setup')}
+            onBack={() =>
+              set("screen", retakeIndex !== null ? "review" : "setup")
+            }
             onDone={onCaptureDone}
           />
         )}
 
-        {screen === 'review' && (
+        {screen === "review" && (
           <ReviewScreen
             mode={mode}
             layout={layout}
@@ -331,12 +395,12 @@ export default function App() {
             shots={shots}
             filterId={filterId}
             onRetake={goCaptureRetake}
-            onBack={() => set('screen', 'capture')}
+            onBack={() => set("screen", "capture")}
             onContinue={goEditor}
           />
         )}
 
-        {screen === 'editor' && (
+        {screen === "editor" && (
           <EditorScreen
             mode={mode}
             layout={layout}
@@ -350,21 +414,25 @@ export default function App() {
             selectedStickerId={selectedStickerId}
             polaroids={polaroids}
             selectedPolaroidId={selectedPolaroidId}
-            onSetBgColor={c => setState(prev => ({ ...prev, bgColor: c, bgImage: null }))}
-            onSetBgImage={src => setState(prev => ({ ...prev, bgImage: src }))}
+            onSetBgColor={(c) =>
+              setState((prev) => ({ ...prev, bgColor: c, bgImage: null }))
+            }
+            onSetBgImage={(src) =>
+              setState((prev) => ({ ...prev, bgImage: src }))
+            }
             onAddSticker={addSticker}
             onMoveSticker={moveSticker}
             onDeleteSticker={deleteSticker}
             onResizeStickerPct={resizeStickerPx}
             onRotateStickerAbs={rotateStickerAbs}
-            onSelectSticker={id => set('selectedStickerId', id)}
-            onSetCaption={t => set('caption', t)}
-            onSetShowDate={v => set('showDate', v)}
+            onSelectSticker={(id) => set("selectedStickerId", id)}
+            onSetCaption={(t) => set("caption", t)}
+            onSetShowDate={(v) => set("showDate", v)}
             brandSetting={brandSetting}
-            onSetBrandSetting={v => set('brandSetting', v)}
+            onSetBrandSetting={(v) => set("brandSetting", v)}
             brandColor={brandColor}
             filterId={filterId}
-            onSetFilterId={id => set('filterId', id)}
+            onSetFilterId={(id) => set("filterId", id)}
             onSelectPolaroid={selectPolaroid}
             onMovePolaroid={movePolaroid}
             onResizePolaroid={resizePolaroid}
@@ -375,7 +443,7 @@ export default function App() {
           />
         )}
 
-        {screen === 'done' && (
+        {screen === "done" && (
           <DoneScreen
             mode={mode}
             layout={layout}
@@ -395,5 +463,5 @@ export default function App() {
         )}
       </main>
     </div>
-  );
+  )
 }

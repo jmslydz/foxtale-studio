@@ -1,4 +1,4 @@
-import { STICKER_COLORS as C, OUTLINE } from './colors';
+import { STICKER_COLORS as C, OUTLINE } from "./colors"
 
 /** Diagonal washi tape strip with zigzag torn ends. */
 export default function WashiTape({ size }: { size: number }) {
@@ -21,5 +21,5 @@ export default function WashiTape({ size }: { size: number }) {
         <circle cx="29" cy="24" r="1.2" fill="#FFFFFF" />
       </g>
     </svg>
-  );
+  )
 }

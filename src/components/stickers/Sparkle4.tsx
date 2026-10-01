@@ -1,4 +1,4 @@
-import { STICKER_COLORS as C, OUTLINE } from './colors';
+import { STICKER_COLORS as C, OUTLINE } from "./colors"
 
 /** Four-point sparkle — rounded diamond star with a lighter outline. */
 export default function Sparkle4({ size }: { size: number }) {
@@ -13,5 +13,5 @@ export default function Sparkle4({ size }: { size: number }) {
       />
       <circle cx="24" cy="20" r="3.2" fill="#FFFFFF" opacity={0.85} />
     </svg>
-  );
+  )
 }

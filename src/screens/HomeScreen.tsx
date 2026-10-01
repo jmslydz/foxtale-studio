@@ -7,24 +7,24 @@ import {
   Heart,
   Flower2,
   Ribbon,
-} from 'lucide-react';
-import ModeCard from '../components/ModeCard';
-import { type Mode } from '../types';
+} from "lucide-react"
+import ModeCard from "../components/ModeCard"
+import { type Mode } from "../types"
 
 interface HomeScreenProps {
-  onSelect: (mode: Mode) => void;
+  onSelect: (mode: Mode) => void
 }
 
 const FLOATIES = [
-  { Icon: Sparkle, color: '#FF8A3D' },
-  { Icon: Heart, color: '#FFB3C8' },
-  { Icon: Flower2, color: '#9EDFC4' },
-  { Icon: Sparkles, color: '#FFE87A' },
-  { Icon: Ribbon, color: '#FFB3C8' },
-  { Icon: Sparkle, color: '#93CCFF' },
-  { Icon: Sparkles, color: '#FFB3C8' },
-  { Icon: Heart, color: '#FF8A3D' },
-];
+  { Icon: Sparkle, color: "#FF8A3D" },
+  { Icon: Heart, color: "#FFB3C8" },
+  { Icon: Flower2, color: "#9EDFC4" },
+  { Icon: Sparkles, color: "#FFE87A" },
+  { Icon: Ribbon, color: "#FFB3C8" },
+  { Icon: Sparkle, color: "#93CCFF" },
+  { Icon: Sparkles, color: "#FFB3C8" },
+  { Icon: Heart, color: "#FF8A3D" },
+]
 
 export default function HomeScreen({ onSelect }: HomeScreenProps) {
   return (
@@ -33,6 +33,7 @@ export default function HomeScreen({ onSelect }: HomeScreenProps) {
       {FLOATIES.map(({ Icon, color }, i) => (
         <span
           key={i}
+          aria-hidden="true"
           className="absolute select-none pointer-events-none opacity-25"
           style={{
             left: `${8 + i * 12}%`,
@@ -52,12 +53,18 @@ export default function HomeScreen({ onSelect }: HomeScreenProps) {
           draggable={false}
           className="h-24 w-auto animate-fade-up"
         />
-        <h1 className="text-center text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-booth-text px-4 animate-fade-up" style={{ animationDelay: '80ms' }}>
+        <h1
+          className="text-center text-5xl sm:text-6xl md:text-7xl font-black tracking-tight text-booth-text px-4 animate-fade-up"
+          style={{ animationDelay: "80ms" }}
+        >
           <span className="text-booth-violet">Fox</span>tale Studio
         </h1>
 
         {/* Mode cards: one row on desktop */}
-        <div className="flex items-center gap-6 flex-wrap justify-center px-4 animate-fade-up" style={{ animationDelay: '160ms' }}>
+        <div
+          className="flex items-center gap-6 flex-wrap justify-center px-4 animate-fade-up"
+          style={{ animationDelay: "160ms" }}
+        >
           <ModeCard
             title="Classic Booth"
             description="Choose your layout — 3 or 4 shots portrait, or a 2×2 landscape grid."
@@ -65,12 +72,14 @@ export default function HomeScreen({ onSelect }: HomeScreenProps) {
             compact
             accent="#FF8A3D"
             bg="linear-gradient(135deg, #E8D5FF, #C8E8FF)"
-            onClick={() => onSelect('classic')}
+            onClick={() => onSelect("classic")}
           />
 
           <div className="flex flex-row sm:flex-col items-center justify-center gap-2 w-full sm:w-auto text-booth-muted">
             <div className="h-px w-16 sm:h-16 sm:w-px bg-booth-border" />
-            <span className="text-xs font-bold tracking-widest uppercase">or</span>
+            <span className="text-xs font-bold tracking-widest uppercase">
+              or
+            </span>
             <div className="h-px w-16 sm:h-16 sm:w-px bg-booth-border" />
           </div>
 
@@ -81,12 +90,14 @@ export default function HomeScreen({ onSelect }: HomeScreenProps) {
             compact
             accent="#FFB3C8"
             bg="linear-gradient(135deg, #FFD6E8, #FFF3C4)"
-            onClick={() => onSelect('pose-match')}
+            onClick={() => onSelect("pose-match")}
           />
 
           <div className="flex flex-row sm:flex-col items-center justify-center gap-2 w-full sm:w-auto text-booth-muted">
             <div className="h-px w-16 sm:h-16 sm:w-px bg-booth-border" />
-            <span className="text-xs font-bold tracking-widest uppercase">or</span>
+            <span className="text-xs font-bold tracking-widest uppercase">
+              or
+            </span>
             <div className="h-px w-16 sm:h-16 sm:w-px bg-booth-border" />
           </div>
 
@@ -97,10 +108,10 @@ export default function HomeScreen({ onSelect }: HomeScreenProps) {
             compact
             accent="#9EDFC4"
             bg="linear-gradient(135deg, #C8F5E3, #FFF3C4)"
-            onClick={() => onSelect('polaroid')}
+            onClick={() => onSelect("polaroid")}
           />
         </div>
       </div>
     </div>
-  );
+  )
 }

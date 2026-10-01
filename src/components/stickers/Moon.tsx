@@ -1,4 +1,4 @@
-import { STICKER_COLORS as C, OUTLINE } from './colors';
+import { STICKER_COLORS as C, OUTLINE } from "./colors"
 
 /** Crescent moon with a lighter outline and a tiny sparkle. */
 export default function Moon({ size }: { size: number }) {
@@ -19,5 +19,5 @@ export default function Moon({ size }: { size: number }) {
         {...OUTLINE}
       />
     </svg>
-  );
+  )
 }

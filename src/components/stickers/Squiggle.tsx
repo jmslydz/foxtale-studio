@@ -1,4 +1,4 @@
-import { STICKER_COLORS as C, OUTLINE } from './colors';
+import { STICKER_COLORS as C, OUTLINE } from "./colors"
 
 /** Thick pastel squiggle line with rounded ends. */
 export default function Squiggle({ size }: { size: number }) {
@@ -19,5 +19,5 @@ export default function Squiggle({ size }: { size: number }) {
         fill="none"
       />
     </svg>
-  );
+  )
 }

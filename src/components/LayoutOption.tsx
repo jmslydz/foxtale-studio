@@ -1,24 +1,31 @@
-import { type Layout } from '../types';
-import StripPreview from './StripPreview';
+import { type Layout } from "../types"
+import StripPreview from "./StripPreview"
 
 interface LayoutOptionProps {
-  layout: Layout;
-  label: string;
-  description: string;
-  selected: boolean;
-  onClick: () => void;
+  layout: Layout
+  label: string
+  description: string
+  selected: boolean
+  onClick: () => void
 }
 
-export default function LayoutOption({ layout, label, description, selected, onClick }: LayoutOptionProps) {
+export default function LayoutOption({
+  layout,
+  label,
+  description,
+  selected,
+  onClick,
+}: LayoutOptionProps) {
   return (
     <button
       onClick={onClick}
+      aria-pressed={selected}
       className={[
-        'flex flex-col items-center gap-3 rounded-2xl border-2 bg-white p-5 transition-all duration-200 hover:-translate-y-1 focus:outline-none',
+        "flex flex-col items-center gap-3 rounded-2xl border-2 bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 focus:outline-none",
         selected
-          ? 'border-booth-violet shadow-lg shadow-booth-lavender/40'
-          : 'border-booth-border hover:border-booth-lavender',
-      ].join(' ')}
+          ? "border-booth-violet shadow-lg shadow-booth-lavender/40"
+          : "border-booth-border hover:border-booth-lavender",
+      ].join(" ")}
     >
       <div className="relative">
         <StripPreview
@@ -39,5 +46,5 @@ export default function LayoutOption({ layout, label, description, selected, onC
         <p className="text-xs text-booth-muted mt-0.5">{description}</p>
       </div>
     </button>
-  );
+  )
 }

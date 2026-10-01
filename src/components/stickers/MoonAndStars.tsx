@@ -1,4 +1,4 @@
-import { STICKER_COLORS as C, OUTLINE } from './colors';
+import { STICKER_COLORS as C, OUTLINE } from "./colors"
 
 /** Small moon with two companion stars. */
 export default function MoonAndStars({ size }: { size: number }) {
@@ -29,5 +29,5 @@ export default function MoonAndStars({ size }: { size: number }) {
         {...OUTLINE}
       />
     </svg>
-  );
+  )
 }

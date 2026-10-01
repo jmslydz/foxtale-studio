@@ -1,55 +1,58 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react"
 
-const PASSWORD = '100606';
+const PASSWORD = "100606"
 const PROMPT =
-  'ARE U MYY BABBYYY?? HMMMM... IFF U AREEE REALLYYY MYY BABYY, KELANN BIRTHHDAYYY MOOO HMMM';
+  "ARE U MYY BABBYYY?? HMMMM... IFF U AREEE REALLYYY MYY BABYY, KELANN BIRTHHDAYYY MOOO HMMM"
 
 const MISS_MESSAGES = [
-  'Hmm... not quite, moo 🐮 try again!',
-  'Nope baby! Think birthdate 😘',
-  'Wrong one! Kelan is watching 👀',
-];
+  "Hmm... not quite, moo 🐮 try again!",
+  "Nope baby! Think birthdate 😘",
+  "Wrong one! Kelan is watching 👀",
+]
 
 /** Love-gate: birthday password with typing animation, wiggling fox and shake-on-miss. */
 export default function LockScreen({ onUnlock }: { onUnlock: () => void }) {
-  const [typed, setTyped] = useState('');
-  const [value, setValue] = useState('');
-  const [misses, setMisses] = useState(0);
-  const [opening, setOpening] = useState(false);
-  const timer = useRef<number | null>(null);
+  const [typed, setTyped] = useState("")
+  const [value, setValue] = useState("")
+  const [misses, setMisses] = useState(0)
+  const [opening, setOpening] = useState(false)
+  const timer = useRef<number | null>(null)
 
   // Typewriter prompt.
   useEffect(() => {
-    let i = 0;
+    let i = 0
     const t = window.setInterval(() => {
-      i += 1;
-      setTyped(PROMPT.slice(0, i));
-      if (i >= PROMPT.length) window.clearInterval(t);
-    }, 42);
-    return () => window.clearInterval(t);
-  }, []);
+      i += 1
+      setTyped(PROMPT.slice(0, i))
+      if (i >= PROMPT.length) window.clearInterval(t)
+    }, 42)
+    return () => window.clearInterval(t)
+  }, [])
 
   useEffect(
     () => () => {
-      if (timer.current) window.clearTimeout(timer.current);
+      if (timer.current) window.clearTimeout(timer.current)
     },
     [],
-  );
+  )
 
   const tryUnlock = (raw: string) => {
-    const digits = raw.replace(/\D/g, '');
-    if (digits.length < 6 || opening) return;
+    const digits = raw.replace(/\D/g, "")
+    if (digits.length < 6 || opening) return
     if (digits === PASSWORD) {
-      setOpening(true);
-      timer.current = window.setTimeout(onUnlock, 1200);
+      setOpening(true)
+      timer.current = window.setTimeout(onUnlock, 1200)
     } else {
-      setMisses(m => m + 1);
-      setValue('');
+      setMisses((m) => m + 1)
+      setValue("")
     }
-  };
+  }
 
   return (
-    <div className="min-h-dvh flex flex-col items-center justify-center relative overflow-hidden px-6 py-10" style={{ background: '#FFF9F5' }}>
+    <div
+      className="min-h-dvh flex flex-col items-center justify-center relative overflow-hidden px-6 py-10"
+      style={{ background: "#FFF9F5" }}
+    >
       <div className="relative z-10 w-full max-w-sm flex flex-col items-center gap-5 animate-pop">
         {/* Wiggling fox */}
         <div className="relative">
@@ -61,32 +64,51 @@ export default function LockScreen({ onUnlock }: { onUnlock: () => void }) {
           />
           {opening && (
             <>
-              <span className="absolute -left-8 top-0 text-3xl animate-pop">💖</span>
-              <span className="absolute -right-8 top-2 text-3xl animate-pop" style={{ animationDelay: '150ms' }}>💖</span>
-              <span className="absolute left-1/2 -translate-x-1/2 -top-8 text-3xl animate-pop" style={{ animationDelay: '300ms' }}>💖</span>
+              <span className="absolute -left-8 top-0 text-3xl animate-pop">
+                💖
+              </span>
+              <span
+                className="absolute -right-8 top-2 text-3xl animate-pop"
+                style={{ animationDelay: "150ms" }}
+              >
+                💖
+              </span>
+              <span
+                className="absolute left-1/2 -translate-x-1/2 -top-8 text-3xl animate-pop"
+                style={{ animationDelay: "300ms" }}
+              >
+                💖
+              </span>
             </>
           )}
         </div>
 
         {/* Typing prompt */}
-        <p className="text-center text-lg font-black text-booth-text leading-relaxed min-h-24" aria-live="polite">
+        <p
+          className="text-center text-lg font-black text-booth-text leading-relaxed min-h-24"
+          aria-live="polite"
+        >
           {typed}
-          <span className="inline-block w-2 animate-pulse text-booth-violet">|</span>
+          <span className="inline-block w-2 animate-pulse text-booth-violet">
+            |
+          </span>
         </p>
-        <p className="text-xs font-bold text-booth-muted tracking-widest -mt-3">PIN IS (DD/MM/YY)</p>
+        <p className="text-xs font-bold text-booth-muted tracking-widest -mt-3">
+          PIN IS (DD/MM/YY)
+        </p>
 
         {/* Password box (shakes on miss) */}
-        <div key={misses} className={misses > 0 ? 'animate-shake' : undefined}>
+        <div key={misses} className={misses > 0 ? "animate-shake" : undefined}>
           <input
             type="password"
             value={value}
-            onChange={e => {
-              const v = e.target.value;
-              setValue(v);
-              tryUnlock(v);
+            onChange={(e) => {
+              const v = e.target.value
+              setValue(v)
+              tryUnlock(v)
             }}
-            onKeyDown={e => {
-              if (e.key === 'Enter') tryUnlock(value);
+            onKeyDown={(e) => {
+              if (e.key === "Enter") tryUnlock(value)
             }}
             inputMode="numeric"
             autoComplete="off"
@@ -99,7 +121,10 @@ export default function LockScreen({ onUnlock }: { onUnlock: () => void }) {
         </div>
 
         {misses > 0 && !opening && (
-          <p role="alert" className="text-sm font-bold text-booth-rose text-center -mt-2">
+          <p
+            role="alert"
+            className="text-sm font-bold text-booth-danger text-center -mt-2"
+          >
             {MISS_MESSAGES[(misses - 1) % MISS_MESSAGES.length]}
           </p>
         )}
@@ -114,9 +139,9 @@ export default function LockScreen({ onUnlock }: { onUnlock: () => void }) {
           disabled={opening}
           className="px-10 py-3 rounded-full bg-booth-violet text-white font-black text-base hover:scale-105 active:scale-95 transition-all duration-150 shadow-lg shadow-booth-lavender/50 disabled:opacity-60"
         >
-          {opening ? 'Opening... 💝' : 'Open mooo 🐮'}
+          {opening ? "Opening... 💝" : "Open mooo 🐮"}
         </button>
       </div>
     </div>
-  );
+  )
 }

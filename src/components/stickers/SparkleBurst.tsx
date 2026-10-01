@@ -1,4 +1,4 @@
-import { STICKER_COLORS as C, OUTLINE } from './colors';
+import { STICKER_COLORS as C, OUTLINE } from "./colors"
 
 /** Sparkle burst: central gem with rays bursting outward. */
 export default function SparkleBurst({ size }: { size: number }) {
@@ -6,7 +6,7 @@ export default function SparkleBurst({ size }: { size: number }) {
     <svg width={size} height={size} viewBox="0 0 48 48" fill="none" aria-hidden>
       {/* burst rays */}
       {Array.from({ length: 8 }).map((_, i) => {
-        const angle = (i * 360) / 8;
+        const angle = (i * 360) / 8
         return (
           <g key={i} transform={`rotate(${angle} 24 24)`}>
             <path
@@ -17,11 +17,19 @@ export default function SparkleBurst({ size }: { size: number }) {
               {...OUTLINE}
             />
           </g>
-        );
+        )
       })}
       {/* center gem */}
-      <circle cx="24" cy="24" r="5.5" fill={C.yellow} stroke={C.yellowDeep} strokeWidth={1.5} {...OUTLINE} />
+      <circle
+        cx="24"
+        cy="24"
+        r="5.5"
+        fill={C.yellow}
+        stroke={C.yellowDeep}
+        strokeWidth={1.5}
+        {...OUTLINE}
+      />
       <circle cx="24" cy="24" r="2.2" fill="#FFFFFF" opacity={0.9} />
     </svg>
-  );
+  )
 }

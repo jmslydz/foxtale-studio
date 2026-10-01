@@ -1,4 +1,4 @@
-import { STICKER_COLORS as C, OUTLINE } from './colors';
+import { STICKER_COLORS as C, OUTLINE } from "./colors"
 
 /** Rounded speech bubble with a curled tail. */
 export default function SpeechBubble({ size }: { size: number }) {
@@ -16,5 +16,5 @@ export default function SpeechBubble({ size }: { size: number }) {
       <circle cx="24" cy="20" r="2" fill={C.mintDeep} />
       <circle cx="31" cy="20" r="2" fill={C.mintDeep} />
     </svg>
-  );
+  )
 }

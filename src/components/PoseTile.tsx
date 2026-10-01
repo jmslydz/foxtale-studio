@@ -1,27 +1,31 @@
-import { type PoseRef } from '../types';
-import { resolvePublicSrc } from '../stickerCatalog';
+import { type PoseRef } from "../types"
+import { resolvePublicSrc } from "../stickerCatalog"
 
 interface PoseTileProps {
-  pose: PoseRef & { color?: string };
+  pose: PoseRef & { color?: string }
   /** 1-based selection number; undefined when not selected. */
-  order?: number;
-  onClick: () => void;
+  order?: number
+  onClick: () => void
 }
 
 /** Reference-photo tile: 4:3, stretched to fill the frame edge to edge. */
 export default function PoseTile({ pose, order, onClick }: PoseTileProps) {
-  const selected = order !== undefined;
+  const selected = order !== undefined
   return (
     <button
       onClick={onClick}
       title={pose.label}
+      aria-label={`${pose.label}${
+        selected ? `, selected as pose ${order}` : ""
+      }`}
+      aria-pressed={selected}
       className={[
-        'relative overflow-hidden rounded-lg border-2 transition-all duration-150 bg-booth-bg',
+        "relative overflow-hidden rounded-lg border-2 transition-all duration-150 bg-booth-bg",
         selected
-          ? 'border-booth-violet shadow-md shadow-booth-lavender/60'
-          : 'border-booth-border hover:border-booth-lavender',
-      ].join(' ')}
-      style={{ aspectRatio: '4 / 3' }}
+          ? "border-booth-violet shadow-md shadow-booth-lavender/60"
+          : "border-booth-border hover:border-booth-lavender",
+      ].join(" ")}
+      style={{ aspectRatio: "4 / 3" }}
     >
       {pose.src ? (
         <img
@@ -35,7 +39,7 @@ export default function PoseTile({ pose, order, onClick }: PoseTileProps) {
       ) : (
         <span
           className="block w-full h-full"
-          style={{ background: pose.color ?? '#E8D5FF' }}
+          style={{ background: pose.color ?? "#E8D5FF" }}
         />
       )}
       {selected && (
@@ -44,14 +48,14 @@ export default function PoseTile({ pose, order, onClick }: PoseTileProps) {
           style={{
             width: 20,
             height: 20,
-            background: '#FF8A3D',
+            background: "#FF8A3D",
             fontSize: 11,
-            boxShadow: '0 1px 4px rgba(58,42,58,0.35)',
+            boxShadow: "0 1px 4px rgba(58,42,58,0.35)",
           }}
         >
           {order}
         </span>
       )}
     </button>
-  );
+  )
 }
