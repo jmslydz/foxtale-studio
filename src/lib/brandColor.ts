@@ -5,7 +5,7 @@ export type BrandSetting = string
 
 export const BRAND_AUTO = "auto"
 
-export const BRAND_SWATCHES: { label: string value: string }[] = [
+export const BRAND_SWATCHES: { label: string; value: string }[] = [
   { label: "Auto", value: BRAND_AUTO },
   { label: "Fox", value: "#FF8A3D" },
   { label: "White", value: "#FFFFFF" },

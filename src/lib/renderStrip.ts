@@ -19,13 +19,13 @@ import { layoutPolaroidText } from "./polaroidText"
  * blob: shot URLs), so the canvas never taints and toBlob always works.
  */
 
-const FONT_STACK = "Nunito, system-ui, sans-serif"
+const FONT_STACK = "DM Sans, system-ui, sans-serif"
 
 /** One drawable reference pose (photo or pastel fallback). */
-type PoseDraw = { label: string src?: string color?: string }
+type PoseDraw = { label: string; src?: string; color?: string }
 
 /** SVG sticker glyph serialized from the live preview, so hand-drawn SVGs export identically. */
-type StickerDraw = { kind: "image" src: string size: number } | {
+type StickerDraw = { kind: "image"; src: string; size: number } | {
   kind: "emoji"
   char: string
   size: number
@@ -52,7 +52,7 @@ export interface RenderStripOptions {
    */
   poseCount?: number
   polaroids: PlacedPolaroid[]
-  /** Render scale; 2 gives a crisp 2x export. */
+  /** Optional minimum scale, within the 4096px export bound. */
   scale?: number
   /** Footer brand color; defaults to an auto pick from the strip color. */
   brandColor?: string
@@ -449,60 +449,32 @@ function drawStickerGlyph(
 export async function renderStripToBlob(
   opts: RenderStripOptions,
 ): Promise<Blob> {
-  const scale = opts.scale ?? 2
+  // Work from unscaled composition geometry, then scale exactly once.
+  // A 1200px short edge preserves much more detail than the old 576px strip
+  // and 293px Polaroid exports. The 4096px cap bounds mobile canvas memory.
   const isPolaroid = opts.mode === "polaroid"
-
-  // On-screen base dimensions (match StripPreview / PolaroidCanvas at scale 1).
+  const isPose = opts.mode === "pose-match"
+  const landscape = opts.layout === "4-landscape" && !isPose
+  const grid = isPose
+    ? getPoseMatchGrid(opts.poseCount ?? Math.max(1, opts.poseRefs.length))
+    : null
+  const cols = grid?.cols ?? (landscape ? 2 : 1)
+  const rows =
+    grid?.rows ?? (landscape ? 2 : opts.layout === "3-portrait" ? 3 : 4)
+  const frameW = grid?.cellW ?? (landscape ? 90 : 160)
+  const frameH = grid?.cellH ?? (landscape ? 68 : 120)
   const baseW = isPolaroid
-    ? Math.round(520 * (9 / 16))
-    : (() => {
-        const isPose = opts.mode === "pose-match"
-        const landscape = opts.layout === "4-landscape" && !isPose
-        const grid = isPose
-          ? getPoseMatchGrid(
-              opts.poseCount ?? Math.max(1, opts.poseRefs.length),
-            )
-          : null
-        const frameW = isPose ? grid!.cellW : landscape ? 90 : 160
-        const cols = isPose ? grid!.cols : landscape ? 2 : 1
-        return (
-          Math.round(10 * scale) * 2 +
-          Math.round(frameW * scale) * cols +
-          Math.round(4 * scale) * (cols - 1)
-        )
-      })()
-  const baseH = isPolaroid
-    ? 520
-    : (() => {
-        const isPose = opts.mode === "pose-match"
-        const landscape = opts.layout === "4-landscape" && !isPose
-        const grid = isPose
-          ? getPoseMatchGrid(
-              opts.poseCount ?? Math.max(1, opts.poseRefs.length),
-            )
-          : null
-        const frameH = isPose ? grid!.cellH : landscape ? 68 : 120
-        const rows = isPose
-          ? grid!.rows
-          : landscape
-            ? 2
-            : opts.layout === "3-portrait"
-              ? 3
-              : 4
-        return (
-          Math.round(10 * scale) * 2 +
-          Math.round(frameH * scale) * rows +
-          Math.round(4 * scale) * (rows - 1) +
-          Math.round(44 * scale)
-        )
-      })()
-
-  // Editor strips use scale 1.6; 2x that keeps the export at >= 2x the
-  // on-screen width. Polaroid renders at height 520 on-screen (W=292);
-  // scale 2 gives 584 >= 2x292. Classic at scale 3.2 gives W >= 2x(1.6*scale).
-  const effScale = isPolaroid ? Math.max(scale, 2) : Math.max(scale, 3.2)
-  const W = Math.round(baseW * (effScale / scale))
-  const H = Math.round(baseH * (effScale / scale))
+    ? (520 * 9) / 16
+    : 20 + frameW * cols + 4 * (cols - 1)
+  const baseH = isPolaroid ? 520 : 20 + frameH * rows + 4 * (rows - 1) + 44
+  const requestedScale = opts.scale ?? 1
+  const effScale = Math.min(
+    Math.max(requestedScale, 1200 / Math.min(baseW, baseH)),
+    4096 / Math.max(baseW, baseH),
+  )
+  const W = Math.round(baseW * effScale)
+  const H = Math.round(baseH * effScale)
+  await document.fonts.ready
 
   const canvas = document.createElement("canvas")
   canvas.width = W

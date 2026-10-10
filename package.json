@@ -6,11 +6,12 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/generate-manifest.mjs && vite",
-    "build": "node scripts/generate-manifest.mjs && vite build",
+    "build": "node scripts/generate-manifest.mjs && tsc --noEmit && vite build",
     "preview": "vite preview",
     "manifest": "node scripts/generate-manifest.mjs",
     "format": "oxfmt",
-    "format:check": "oxfmt --check"
+    "format:check": "oxfmt --check",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "lucide-react": "^1.47.0",

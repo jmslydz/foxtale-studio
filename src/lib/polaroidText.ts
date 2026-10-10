@@ -11,7 +11,7 @@
  * - Bottom border = max(24% of W, text height + 4% of W).
  */
 
-const FONT_STACK = "Nunito, system-ui, sans-serif"
+const FONT_STACK = "DM Sans, system-ui, sans-serif"
 
 let measureCtx: CanvasRenderingContext2D | null = null
 

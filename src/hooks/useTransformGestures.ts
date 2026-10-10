@@ -67,7 +67,7 @@ export function startMove(
 export function startResize(
   e: React.PointerEvent,
   opts: {
-    center: { x: number y: number }
+    center: { x: number; y: number }
     initialSize: number
     min: number
     max: number
@@ -109,7 +109,7 @@ export function startResize(
 export function startRotate(
   e: React.PointerEvent,
   opts: {
-    center: { x: number y: number }
+    center: { x: number; y: number }
     initialRotation: number
     onRotate: (rotation: number) => void
   },

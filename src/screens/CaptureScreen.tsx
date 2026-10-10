@@ -267,7 +267,7 @@ export default function CaptureScreen({
   )
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col animate-screen-in">
+    <div className="screen-capture flex-1 min-h-0 flex flex-col animate-screen-in">
       <div className="flex-1 min-h-0 flex flex-col gap-3 px-4 sm:px-10 pt-5 pb-2">
         {/* Progress bar */}
         <div className="shrink-0 flex items-center gap-2">
@@ -466,17 +466,6 @@ export default function CaptureScreen({
                     <Upload size={16} strokeWidth={2} /> Upload photos
                   </button>
                 </div>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  multiple={!isRetake}
-                  className="hidden"
-                  onChange={(e) => {
-                    handleUploadFiles(e.target.files)
-                    e.target.value = ""
-                  }}
-                />
               </div>
             )}
           </div>
@@ -497,7 +486,7 @@ export default function CaptureScreen({
                 <img
                   src={resolvePublicSrc(currentPose.src)}
                   alt={`Reference pose: ${currentPose?.label ?? "sample"}`}
-                  className="absolute inset-0 w-full h-full object-fill bg-booth-bg"
+                  className="absolute inset-0 w-full h-full object-cover bg-booth-bg"
                   draggable={false}
                 />
               ) : (
@@ -521,6 +510,18 @@ export default function CaptureScreen({
           </p>
         )}
       </div>
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        multiple={!isRetake}
+        className="hidden"
+        onChange={(e) => {
+          handleUploadFiles(e.target.files)
+          e.target.value = ""
+        }}
+      />
 
       {/* Pinned bottom bar: Back + Start always visible */}
       <BottomBar>
@@ -549,6 +550,15 @@ export default function CaptureScreen({
               ? "Ready..."
               : "Captured!"}
         </button>
+        {!cameraDown && (
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={captureState !== "idle" || sessionComplete}
+            className="flex items-center gap-2 px-4 py-2.5 border border-booth-border text-booth-muted font-bold text-sm disabled:opacity-40"
+          >
+            <Upload size={16} /> Upload photos
+          </button>
+        )}
       </BottomBar>
     </div>
   )

@@ -10,7 +10,7 @@ export const FRAME_ASPECT = SHOT_ASPECT
 /**
  * Draws the current frame of a <video> element onto a canvas, center-cropped
  * to the strip's frame aspect ratio and mirrored (selfie lenses only) to
- * match the scaleX(-1) preview, then encodes it as a JPEG blob.
+ * match the scaleX(-1) preview, then encodes it losslessly as PNG where supported.
  */
 export function captureFrame(
   video: HTMLVideoElement,
@@ -91,8 +91,8 @@ export function captureFrame(
       return
     }
 
-    // Encode with fallbacks: some phone browsers return null for JPEG blobs
-    // (memory/format quirks) yet succeed with PNG or data URLs.
+    // Keep native detail in a lossless intermediate before filters/export.
+    // JPEG and data URLs remain fallbacks for browser encoder failures.
     const toBlob = (type: string, quality?: number) =>
       new Promise<Blob | null>((resolve) => {
         try {
@@ -102,10 +102,10 @@ export function captureFrame(
         }
       })
     ;(async () => {
-      const jpeg = await toBlob("image/jpeg", 0.95)
-      if (jpeg && jpeg.size > 0) return jpeg
       const png = await toBlob("image/png")
       if (png && png.size > 0) return png
+      const jpeg = await toBlob("image/jpeg", 0.98)
+      if (jpeg && jpeg.size > 0) return jpeg
       try {
         const res = await fetch(canvas.toDataURL("image/jpeg", 0.9))
         const dataBlob = await res.blob()

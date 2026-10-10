@@ -64,7 +64,7 @@ export function useCamera() {
         const caps = track?.getCapabilities?.()
         const z =
           caps && "zoom" in caps
-            ? (caps as { zoom?: { min: number max: number step: number } }).zoom
+            ? (caps as { zoom?: { min: number; max: number; step: number } }).zoom
             : undefined
         if (
           z &&

@@ -1,6 +1,5 @@
-import { type Layout } from "../types"
-import StripPreview from "./StripPreview"
-
+import { Check } from "lucide-react"
+import type { Layout } from "../types"
 interface LayoutOptionProps {
   layout: Layout
   label: string
@@ -8,7 +7,6 @@ interface LayoutOptionProps {
   selected: boolean
   onClick: () => void
 }
-
 export default function LayoutOption({
   layout,
   label,
@@ -16,35 +14,42 @@ export default function LayoutOption({
   selected,
   onClick,
 }: LayoutOptionProps) {
+  const grid = layout === "4-landscape"
+  const count = layout === "3-portrait" ? 3 : 4
   return (
     <button
       onClick={onClick}
       aria-pressed={selected}
-      className={[
-        "flex flex-col items-center gap-3 rounded-2xl border-2 bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 focus:outline-none",
-        selected
-          ? "border-booth-violet shadow-lg shadow-booth-lavender/40"
-          : "border-booth-border hover:border-booth-lavender",
-      ].join(" ")}
+      className={`layout-card ${selected ? "is-selected" : ""}`}
     >
-      <div className="relative">
-        <StripPreview
-          layout={layout}
-          shots={[]}
-          bgColor="#FFFFFF"
-          scale={0.85}
-          tilted={false}
-        />
-        {selected && (
-          <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-booth-violet flex items-center justify-center text-white text-xs font-bold shadow-sm">
-            ✓
+      <div className="layout-card-top">
+        <span>
+          {grid
+            ? "THE WHOLE PICTURE"
+            : count === 3
+              ? "SHORT & SWEET"
+              : "A BOOTH FAVORITE"}
+        </span>
+        <span className="layout-check">{selected && <Check size={13} />}</span>
+      </div>
+      <div className="layout-sample" aria-hidden="true">
+        <div className={`layout-paper ${grid ? "is-grid" : ""}`}>
+          <div className="layout-frames">
+            {Array.from({ length: count }, (_, i) => (
+              <span key={i}>
+                <img
+                  src={`${import.meta.env.BASE_URL}brand/fox-mark.svg`}
+                  alt=""
+                />
+                <small>0{i + 1}</small>
+              </span>
+            ))}
           </div>
-        )}
+          <p>FOXTALE STUDIO</p>
+        </div>
       </div>
-      <div className="text-center">
-        <p className="font-bold text-booth-text text-sm">{label}</p>
-        <p className="text-xs text-booth-muted mt-0.5">{description}</p>
-      </div>
+      <h3>{label}</h3>
+      <p>{description}</p>
     </button>
   )
 }

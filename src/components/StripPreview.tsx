@@ -27,7 +27,7 @@ interface StripPreviewProps {
   /** Session filter, applied to the USER's shots only. */
   filterId?: string
   /** pose-match: resolved reference for each row (samples carry a color instead of src). */
-  poseRefs?: { label: string src?: string color?: string }[]
+  poseRefs?: { label: string; src?: string; color?: string }[]
   /**
    * pose-match: THE authoritative pose count. When given, the grid derives
    * from it — never from poseRefs.length (which must equal poseCount anyway).
@@ -67,7 +67,7 @@ function PoseReferenceCell({
   height,
 }: {
   row: number
-  poseRefs: { label: string src?: string color?: string }[]
+  poseRefs: { label: string; src?: string; color?: string }[]
   width: number
   height: number
 }) {

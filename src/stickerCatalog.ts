@@ -1,7 +1,7 @@
 import manifest from "./generated/manifest.json"
 import { STICKER_CATEGORIES, type StickerDef, type PoseRef } from "./types"
 
-export type BackgroundDef = { id: string label: string src: string }
+export type BackgroundDef = { id: string; label: string; src: string }
 
 /** Sticker categories generated from public/stickers/, grouped by folder. */
 export const IMAGE_STICKER_CATEGORIES: {
@@ -49,7 +49,7 @@ export function getCustomStickers(): StickerDef[] {
 
 /** Register uploaded images as stickers; returns the created defs. */
 export function addCustomStickers(
-  files: { src: string label: string }[],
+  files: { src: string; label: string }[],
 ): StickerDef[] {
   const created: StickerDef[] = files.map((f, i) => ({
     id: `custom-sticker-${Date.now()}-${i}-${Math.random().toString(36).slice(2)}`,
@@ -89,7 +89,7 @@ export function getAllBackgrounds(): BackgroundDef[] {
 
 /** Register uploaded images as strip backgrounds; returns the created defs. */
 export function addCustomBackgrounds(
-  files: { src: string label: string }[],
+  files: { src: string; label: string }[],
 ): BackgroundDef[] {
   const created: BackgroundDef[] = files.map((f, i) => ({
     id: `custom-bg-${Date.now()}-${i}-${Math.random().toString(36).slice(2)}`,
@@ -122,7 +122,7 @@ export function getCustomPoses(): PoseRef[] {
 
 /** Register uploaded photos as poses; returns the created refs. */
 export function addCustomPoses(
-  files: { src: string label: string }[],
+  files: { src: string; label: string }[],
 ): PoseRef[] {
   const created: PoseRef[] = files.map((f, i) => ({
     id: `custom-${Date.now()}-${i}-${Math.random().toString(36).slice(2)}`,

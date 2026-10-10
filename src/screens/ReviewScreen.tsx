@@ -30,7 +30,7 @@ interface ReviewScreenProps {
 }
 
 /** Sample tiles when public/poses/ has no images yet. */
-const SAMPLE_POSES: PoseRef & { color: string }[] = PASTEL_PHOTO_COLORS.slice(
+const SAMPLE_POSES: (PoseRef & { color: string })[] = PASTEL_PHOTO_COLORS.slice(
   0,
   6,
 ).map((c, i) => ({
@@ -110,7 +110,7 @@ export default function ReviewScreen({
       : "Tap any photo to retake it, or continue to decorate."
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col animate-screen-in">
+    <div className="screen-review flex-1 min-h-0 flex flex-col animate-screen-in">
       <div className="shrink-0 text-center pt-5 pb-2 px-4 sm:px-8">
         <h2 className="text-2xl font-black text-booth-text">{heading}</h2>
         <p className="text-booth-muted text-sm mt-1">{subheading}</p>

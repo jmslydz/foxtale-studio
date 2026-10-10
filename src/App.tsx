@@ -320,8 +320,9 @@ export default function App() {
 
   return (
     <div
-      className="min-h-dvh xl:h-dvh flex flex-col xl:overflow-hidden"
-      style={{ background: "#FFF9F5" }}
+      className={`studio-app min-h-dvh flex flex-col ${
+        screen === "home" ? "" : "xl:h-dvh xl:overflow-hidden"
+      }`}
     >
       <StepHeader screen={screen} />
 
