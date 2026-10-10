@@ -49,7 +49,7 @@ export default function SelectionBox({
     return { x: r.left + r.width / 2, y: r.top + r.height / 2 }
   }
 
-  const corners: { label: string cx: number cy: number cursor: string }[] = [
+  const corners: { label: string; cx: number; cy: number; cursor: string }[] = [
     { label: "nw", cx: 0, cy: 0, cursor: "nwse-resize" },
     { label: "ne", cx: size.w, cy: 0, cursor: "nesw-resize" },
     { label: "se", cx: size.w, cy: size.h, cursor: "nwse-resize" },

@@ -1,3 +1,4 @@
+import Brand from "./Brand"
 import { STEPS, SCREEN_STEPS, type Screen } from "../types"
 
 interface StepHeaderProps {
@@ -8,22 +9,18 @@ export default function StepHeader({ screen }: StepHeaderProps) {
   const current = SCREEN_STEPS[screen]
 
   return (
-    <header className="w-full min-h-16 shrink-0 bg-white border-b border-booth-border px-4 py-2 sm:px-8 flex items-center justify-between select-none">
-      <div className="flex items-center gap-2 min-w-0">
-        <img
-          src={`${import.meta.env.BASE_URL}brand/fox-logo.png`}
-          alt="Foxtale Studio logo"
-          draggable={false}
-          className="h-9 w-auto"
-        />
-        <span className="text-xl font-black tracking-tight text-booth-text hidden md:block">
-          <span className="text-booth-violet">Fox</span>tale Studio
+    <header className="studio-header w-full min-h-16 shrink-0 bg-white border-b border-booth-border px-4 py-2 sm:px-8 flex items-center justify-between select-none">
+      <Brand compact={screen !== "home"} />
+      {screen === "home" && (
+        <span className="header-note">
+          A photo booth with a little soul <span>✳</span>
         </span>
-      </div>
-
+      )}
       {/* Full stepper fits on tablets and up */}
       <div
-        className="hidden lg:flex items-center gap-1 justify-end"
+        className={`${
+          screen === "home" ? "hidden" : "hidden lg:flex"
+        } items-center gap-1 justify-end`}
         role="list"
         aria-label="Workflow progress"
       >
@@ -87,7 +84,11 @@ export default function StepHeader({ screen }: StepHeaderProps) {
       </div>
 
       {/* Compact progress on phones: 6 labeled steps can't fit side by side */}
-      <div className="lg:hidden flex flex-col gap-1 w-full max-w-[200px]">
+      <div
+        className={`${
+          screen === "home" ? "hidden" : "lg:hidden flex"
+        } flex-col gap-1 w-full max-w-[180px]`}
+      >
         <div className="flex items-center justify-between gap-2">
           <span className="text-xs font-black text-booth-violet whitespace-nowrap">
             Step {current} of {STEPS.length}
@@ -111,8 +112,6 @@ export default function StepHeader({ screen }: StepHeaderProps) {
           />
         </div>
       </div>
-
-      <div className="hidden sm:block sm:w-32" />
     </header>
   )
 }

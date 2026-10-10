@@ -41,7 +41,7 @@ function RibbonDecor(props: {
 }) {
   return <RibbonIcon {...props} />
 }
-function HeartDecor(props: { size: number strokeWidth: number color: string }) {
+function HeartDecor(props: { size: number; strokeWidth: number; color: string }) {
   return <HeartIcon {...props} />
 }
 
@@ -183,9 +183,7 @@ export default function DoneScreen({
         poseRefs,
         poseCount,
         polaroids,
-        // 2x the on-screen composition: stickers scale with the export width
-        // (sizePct of canvas width), so the file matches the Editor exactly.
-        scale: 2,
+        // Export uses the shared high-resolution, memory-bounded default.
       })
       const url = URL.createObjectURL(blob)
       const a = document.createElement("a")
@@ -208,7 +206,7 @@ export default function DoneScreen({
   }
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col relative overflow-hidden animate-screen-in">
+    <div className="screen-done flex-1 min-h-0 flex flex-col relative overflow-hidden animate-screen-in">
       <div className="flex-1 min-h-0 flex flex-col items-center relative overflow-hidden">
         {/* Confetti-ish decorations */}
         {[
@@ -236,10 +234,10 @@ export default function DoneScreen({
 
         <div className="shrink-0 text-center pt-4 pb-3 z-10">
           <h2 className="text-2xl font-black text-booth-text">
-            Your strip is ready!
+            Your keepsake is ready.
           </h2>
           <p className="text-booth-muted mt-1 text-sm">
-            Looking cute! Download your strip or keep editing.
+            Save your little tale, or add one last finishing touch.
           </p>
         </div>
 
@@ -348,7 +346,7 @@ export default function DoneScreen({
             </>
           ) : (
             <>
-              <Download size={18} strokeWidth={2} /> Download PNG
+              <Download size={18} strokeWidth={2} /> Download high-res PNG
             </>
           )}
         </button>

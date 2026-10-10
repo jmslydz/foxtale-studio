@@ -38,7 +38,7 @@ interface SetupScreenProps {
   onContinue: () => void
 }
 
-const LAYOUT_OPTIONS: { layout: Layout label: string description: string }[] = [
+const LAYOUT_OPTIONS: { layout: Layout; label: string; description: string }[] = [
   {
     layout: "3-portrait",
     label: "3-Shot Strip",
@@ -68,7 +68,7 @@ const POSE_COUNTS: {
 ]
 
 /** Sample tiles when public/poses/ has no images yet. */
-const SAMPLE_POSES: PoseRef & { color: string }[] = PASTEL_PHOTO_COLORS.slice(
+const SAMPLE_POSES: (PoseRef & { color: string })[] = PASTEL_PHOTO_COLORS.slice(
   0,
   6,
 ).map((c, i) => ({
@@ -113,7 +113,7 @@ export default function SetupScreen({
 
   // Uploads first ("My Poses"), then the manifest; samples only when both are empty.
   const customPoses = getCustomPoses()
-  const allPoses: PoseRef & { color?: string }[] =
+  const allPoses: (PoseRef & { color?: string })[] =
     customPoses.length > 0 || POSES.length > 0
       ? [...customPoses, ...POSES]
       : SAMPLE_POSES
@@ -143,7 +143,7 @@ export default function SetupScreen({
   }
 
   // Group by category, preserving manifest (or sample) order.
-  const categories: { name: string poses: PoseRef[] }[] = []
+  const categories: { name: string; poses: PoseRef[] }[] = []
   for (const p of allPoses) {
     const cat = categories.find((c) => c.name === p.category)
     if (cat) cat.poses.push(p)
@@ -313,7 +313,7 @@ export default function SetupScreen({
       : []
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col animate-screen-in">
+    <div className="screen-setup flex-1 min-h-0 flex flex-col animate-screen-in">
       {mode !== "polaroid" && (
         <div className="shrink-0 text-center pt-5 pb-3 px-8">
           <h2 className="text-2xl font-black text-booth-text">{heading}</h2>

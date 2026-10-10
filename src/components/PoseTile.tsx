@@ -8,7 +8,7 @@ interface PoseTileProps {
   onClick: () => void
 }
 
-/** Reference-photo tile: 4:3, stretched to fill the frame edge to edge. */
+/** Reference-photo tile: 4:3, center-cropped to fill the frame edge to edge. */
 export default function PoseTile({ pose, order, onClick }: PoseTileProps) {
   const selected = order !== undefined
   return (
@@ -34,7 +34,7 @@ export default function PoseTile({ pose, order, onClick }: PoseTileProps) {
           loading="lazy"
           decoding="async"
           draggable={false}
-          className="w-full h-full object-fill"
+          className="w-full h-full object-cover"
         />
       ) : (
         <span

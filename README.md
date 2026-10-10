@@ -24,7 +24,9 @@ corepack pnpm manifest # regenerate src/generated/manifest.json only
 
 Assets in `public/stickers`, `public/backgrounds`, `public/poses` are indexed by `scripts/generate-manifest.mjs` into `src/generated/manifest.json` automatically on `dev`/`build`.
 
-Brand assets in `public/brand`: `fox-logo.png` (app logo/favicon) and `brandname.png` (wordmark).
+Brand assets in `public/brand`: `fox-mark.svg` (logo/favicon), `fox-face.svg` (sticker), and `fox-hero.webp` (illustration). Original brand images are retained.
+
+See [the redesign notes and previews](docs/redesign.md). Run `npm run typecheck` to check TypeScript; production builds also include this check.
 
 ## Env
 

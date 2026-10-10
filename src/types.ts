@@ -28,7 +28,7 @@ export const STICKER_SIZE_MAX = 60
 export const STICKER_SIZE_DEFAULT_GRAPHIC = 22
 export const STICKER_SIZE_DEFAULT_EMOJI = 10
 
-export type Shot = { id: string blob: Blob url: string }
+export type Shot = { id: string; blob: Blob; url: string }
 
 export interface PlacedSticker {
   id: string
@@ -101,6 +101,9 @@ export const PASTEL_PHOTO_COLORS = [
 ]
 
 export const BG_COLORS = [
+  { label: "Oat", value: "#F3E9D8" },
+  { label: "Sage", value: "#DCE4D3" },
+  { label: "Terracotta", value: "#D88C68" },
   { label: "White", value: "#FFFFFF" },
   { label: "Pink", value: "#FFD6E8" },
   { label: "Lavender", value: "#E8D5FF" },
@@ -111,7 +114,16 @@ export const BG_COLORS = [
   { label: "Noir", value: "#2A1A2A" },
 ]
 
-export const STICKER_CATEGORIES: { name: string stickers: StickerDef[] }[] = [
+export const STICKER_CATEGORIES: { name: string; stickers: StickerDef[] }[] = [
+  {
+    name: "Foxtale",
+    stickers: [
+      { id: "foxtale-fox", label: "Foxtale fox", src: "brand/fox-face.svg" },
+      { id: "foxtale-mark", label: "Foxtale stamp", src: "brand/fox-mark.svg" },
+      { id: "foxtale-heart", label: "Little love", emoji: "🤎" },
+      { id: "foxtale-leaf", label: "Autumn leaf", emoji: "🍂" },
+    ],
+  },
   {
     name: "Stars",
     stickers: [

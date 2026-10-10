@@ -111,6 +111,7 @@ export default function EditorScreen({
   // Center-pane size: fitBox sizes the strip as large as the pane allows.
   const {
     ref: paneRef,
+    element: paneElement,
     width: paneW,
     height: paneH,
   } = useElementSize<HTMLDivElement>()
@@ -460,7 +461,7 @@ export default function EditorScreen({
   )
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col animate-screen-in">
+    <div className="screen-editor flex-1 min-h-0 flex flex-col animate-screen-in">
       <div className="flex-1 min-h-0 flex flex-col xl:flex-row pb-20 xl:pb-0">
         {/* Left panel: stacked sections in one column; scrolls inside itself if tall */}
         <div className="w-full xl:w-60 shrink-0 border-b xl:border-b-0 xl:border-r border-booth-border bg-white flex flex-col overflow-y-auto order-2 xl:order-none">
@@ -606,7 +607,7 @@ export default function EditorScreen({
         {/* Center: strip canvas, fitBox-sized (× zoom). Scrolls when zoomed in. */}
         <div
           ref={paneRef}
-          className="flex-1 min-w-0 min-h-[360px] xl:min-h-0 bg-[#F7F0F7] relative focus:outline-none order-3 xl:order-none"
+          className="flex-1 min-w-0 min-h-[360px] xl:min-h-0 bg-[#ECEFE5] relative focus:outline-none order-3 xl:order-none"
           role="region"
           aria-label="Photo canvas"
           aria-describedby="canvas-keyboard-help"
@@ -625,7 +626,7 @@ export default function EditorScreen({
             className="absolute inset-0 pointer-events-none opacity-30"
             style={{
               backgroundImage:
-                "radial-gradient(circle, #FF8A3D 1px, transparent 1px)",
+                "radial-gradient(circle, #90A083 1px, transparent 1px)",
               backgroundSize: "24px 24px",
             }}
           />
@@ -994,7 +995,7 @@ export default function EditorScreen({
                         onClick={() => {
                           onSelectPolaroid(photo.id)
                           onSelectSticker(null)
-                          paneRef.current?.focus()
+                          paneElement?.focus()
                         }}
                         aria-label={`Select photo ${photo.shotIndex + 1}`}
                         aria-pressed={selectedPolaroidId === photo.id}
@@ -1026,7 +1027,7 @@ export default function EditorScreen({
                         onClick={() => {
                           onSelectSticker(s.id)
                           onSelectPolaroid(null)
-                          paneRef.current?.focus()
+                          paneElement?.focus()
                         }}
                         aria-label={`Select ${findStickerDef(s.stickerId)?.label ?? "sticker"}`}
                         aria-pressed={selectedStickerId === s.id}

@@ -49,5 +49,5 @@ export default function useElementSize<T extends HTMLElement>() {
     return () => ro.disconnect()
   }, [node])
 
-  return { ref, width: size.width, height: size.height }
+  return { ref, element: node, width: size.width, height: size.height }
 }
